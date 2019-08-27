@@ -3,7 +3,7 @@ Django代码
 
 访问http://127.0.0.1:8000/getphone/15037609792 ，显示当前时间和手机信息
 
-![1566907761067](assets\1566907761067.png)
+![1566907761067](https://github.com/songdanlee/DjangoWorkSpace/blob/master/assets/1566907761067.png)
 
 访问http://127.0.0.1:8000/article/，显示书籍列表页
 
