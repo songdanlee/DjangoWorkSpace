@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>article_list</title>
+    <style>
+        .table_class{
+            margin: 100px  auto;
+
+        }
+        table tr td{
+            border: 1px solid red;
+            font-size: 20px;
+            width: 200px;
+            height: 40px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <table class="table_class">
+        <caption>最火文章</caption>
+        <tr>
+            <th>标题</th>
+            <th>作者</th>
+            <th>创建时间</th>
+        </tr>
+        {% for art in articles %}
+
+        <tr>
+            <td><a href="/article_content/{{art.id}}/">{{art.title}}</a></td>
+            <td>{{art.author}}</td>
+            <td>{{art.public_time}}</td>
+        </tr>
+
+        {% endfor %}
+
+
+    </table>
+
+</body>
+</html>

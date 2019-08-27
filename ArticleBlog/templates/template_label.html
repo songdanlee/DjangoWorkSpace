@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>template_label</title>
+    <style type="text/css">
+       li{
+           color: red;
+       }
+    </style>
+</head>
+<body>
+    <ul>
+        {% for te in teacher %}
+            <li>name:{{te.name}}&nbsp;&nbsp;&nbsp;&nbsp;age:{{te.age}}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

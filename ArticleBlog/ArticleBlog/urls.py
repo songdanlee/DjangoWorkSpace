@@ -28,4 +28,9 @@ urlpatterns = [
     re_path(r"^readme/(?P<name>\w+)", readme),
     re_path(r"^page/(?P<page>\d{1,2})", page_list),
     re_path(r"view_index", view_index),
+    path("tv/", template_variable),
+    path("tl/", template_label),
+    path("tl/", template_label),
+    path("article/", article_list),
+    re_path("article_content/(?P<id>\d{1,2})/", article_content),
 ]

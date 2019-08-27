@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>article_content</title>
+    <style>
+        .biaoti{
+            font-size: 26px;
+            color: red;
+        }
+        .zuozhe{
+             font-size: 26px;
+            color: blue;
+        }
+        .tim{
+             font-size: 26px;
+             color: green;
+        }
+        .neirong{
+            font-size: 20px;
+            color: goldenrod;
+        }
+
+    </style>
+</head>
+<body>
+<span class="biaoti">标题《{{title}}》</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="zuozhe">作者</span>--------<span class="zuozhe">{{author}}</span>----------<span class="tim">于{{public_time}}</span>
+    <hr>
+    <pre>
+        <span class="neirong">
+             {{content}}
+        </span>
+    </pre>
+
+</body>
+</html>
