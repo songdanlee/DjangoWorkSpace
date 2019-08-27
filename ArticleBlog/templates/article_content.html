@@ -20,12 +20,23 @@
             font-size: 20px;
             color: goldenrod;
         }
+        body{
+            margin: 0px;
+            background: url("/static/image/content.png") no-repeat;
+            background-size:100% 100%;
+            background-attachment:fixed;
+        }
+         .wz{
+            float: left;
+        }
 
     </style>
 </head>
 <body>
-<span class="biaoti">标题《{{title}}》</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="zuozhe">作者</span>--------<span class="zuozhe">{{author}}</span>----------<span class="tim">于{{public_time}}</span>
+    <p><a href="/article/">返回首页</a></p>
+    <span class="biaoti">标题《{{title}}》</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="zuozhe">作者</span>--------<span class="zuozhe">{{author}}</span>----------<span class="tim">于{{public_time}}</span>
     <hr>
+    <img class="wz" src="/static/{{image}}">
     <pre>
         <span class="neirong">
              {{content}}

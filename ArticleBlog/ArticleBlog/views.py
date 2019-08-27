@@ -93,16 +93,16 @@ def template_label(request):
     return HttpResponse(result)
 
 articles = [
-    {"id": 1, "title": "背影", "author": "朱自清", "public_time": "1883-3-3","content": beiying},
-    {"id": 2, "title": "骆驼祥子", "author": "老舍", "public_time": "1885-3-3", "content": xiangzi},
-    {"id": 3, "title": "岳阳楼记", "author": "范仲淹", "public_time": "公元1046年6月", "content": yueyanglou},
-    {"id": 4, "title": "滕王阁序", "author": "王勃 ", "public_time": "上元二年（675年）", "content": tengwangge},
-    {"id": 5, "title": "侠客行", "author": "李白", "public_time": "天宝三载（744年）", "content": xiakexing}
+    {"id": 1, "title": "背影", "author": "朱自清", "public_time": "1925","content": beiying,"image":"image/by.jpg"},
+    {"id": 2, "title": "骆驼祥子", "author": "老舍", "public_time": "1936-3-3", "content": xiangzi,"image":"image/ltxz.jpeg"},
+    {"id": 3, "title": "岳阳楼记", "author": "范仲淹", "public_time": "公元1046年6月", "content": yueyanglou,"image":"image/yylj.jpg"},
+    {"id": 4, "title": "滕王阁序", "author": "王勃 ", "public_time": "上元二年（675年）", "content": tengwangge,"image":"image/twgx.jpg"},
+    {"id": 5, "title": "侠客行", "author": "李白", "public_time": "天宝三载（744年）", "content": xiakexing,"image":"image/xkx.jpg"}
 ]
 
 def article_list(request):
     template = get_template("article_list.html")
-    result = template.render({"articles":articles})
+    result = template.render({"article":articles,"aa":"abc"})
     return HttpResponse(result)
 
 def article_content(request,id):

@@ -1,43 +1,111 @@
+{% load static  %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>article_list</title>
     <style>
-        .table_class{
-            margin: 100px  auto;
-
+        body{
+            background-image: url("/static/image/bg.jpg");
         }
-        table tr td{
-            border: 1px solid red;
-            font-size: 20px;
+        .article_table{
+            font-size: 24px;
+            margin: 100px auto;
+        }
+        .article_table tr th{
+            text-align: left;
+        }
+        .article_table tr td{
             width: 200px;
             height: 40px;
         }
+        .article_table tr td img{
+            height: 100px;
+            width: 100px;
+        }
+        .sword{
+            float: right;
 
+        }
     </style>
 </head>
 <body>
 
-    <table class="table_class">
-        <caption>最火文章</caption>
+<center>
+<marquee  direction="left" bgcolor="#FFCC99" width="730" height="35" scrollamount="3" behavior="alternate"><font color="blue">欢迎来到，小破站(✪ω✪)，是兄弟就来互砍</font></marquee>
+</center>
+
+<div class="sword">
+ <pre>
+           ,
+          / \
+         {   }
+         p   !
+         ; : ;
+         | : |
+         | : |
+         l ; l
+         l ; l
+         I ; I
+         I ; I
+         I ; I
+         I ; I
+         d | b
+         H | H
+         H | H
+         H I H
+ ,;,     H I H     ,;,
+;H@H;    ;_H_;,   ;H@H;
+`\Y/d_,;|4H@HK|;,_b\Y/'
+ '\;MMMMM$@@@$MMMMM;/'
+   "~~~*;!8@8!;*~~~"
+         ;888;
+         ;888;
+         ;888;
+         ;888;
+         d8@8b
+         O8@8O
+         T808T
+          `~`
+ </pre>
+</div>
+<div>
+
+        <table class="article_table">
+        <caption><b>最火文章</b></caption>
         <tr>
+            <th>ID</th>
+            <th>图片</th>
             <th>标题</th>
             <th>作者</th>
             <th>创建时间</th>
         </tr>
-        {% for art in articles %}
+    <!--  article为传入字典的key，art为value的每一项      -->
+        {% for art in article %}
+            <tr>
+                <td>{{art.id}}</td>
+<!--                <td ><a href="/article_content/{{art.id}}/"><img src="/static/{{art.image}}/"></a></td>-->
+                <td ><a href="/article_content/{{art.id}}/"><img src="{% static art.image %}/"></a></td>
 
-        <tr>
-            <td><a href="/article_content/{{art.id}}/">{{art.title}}</a></td>
-            <td>{{art.author}}</td>
-            <td>{{art.public_time}}</td>
-        </tr>
+                <td><a href="/article_content/{{art.id}}/">{{art.title}}</a></td>
+                <td>{{art.author}}</td>
+                <td>{{art.public_time}}</td>
+            </tr>
 
         {% endfor %}
 
 
     </table>
+
+<!--    {% for xx in aa %}-->
+<!--        <h4>外层{{forloop}}</h4>-->
+<!--         {% for art in article %}-->
+<!--            <h5>内层{{forloop}}</h5>-->
+<!--         {% endfor %}-->
+<!--    {% endfor %}-->
+
+    </div>
+
 
 </body>
 </html>
