@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from django.urls.conf import include
 from ArticleBlog.views import *
 
 urlpatterns = [
@@ -24,5 +25,7 @@ urlpatterns = [
     re_path("^$", index),  # 设置首页，即通过http://127.0.0.1:8000/访问index
     re_path(r'^introduct/(?P<name>\w+)/(?P<age>\d{1,2})$', introduce),
     re_path(r"^getphone/(?P<phone>\d+)$", getphone),
-    re_path(r"^readme/(?P<name>\w+)", readme)
+    re_path(r"^readme/(?P<name>\w+)", readme),
+    re_path(r"^page/(?P<page>\d{1,2})", page_list),
+    re_path(r"view_index", view_index),
 ]

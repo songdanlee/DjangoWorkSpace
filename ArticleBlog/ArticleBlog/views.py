@@ -2,7 +2,7 @@ from django.http import HttpResponse
 import time
 import requests
 import re
-
+from django.template.loader import get_template
 
 def index(request):
     return HttpResponse("<h1 style='color:red'>hello world</h1>")
@@ -32,3 +32,17 @@ def getphone(request, phone):
 
 def readme(request, name):
     return HttpResponse("Welcome %s" % name)
+
+
+
+def view_index(request):
+    tempalte = get_template("index.html")
+    result = tempalte.render({})
+    return HttpResponse(result)
+
+def page_list(request,page):
+
+    page = int(page)
+    tempalte = get_template("page_list.html")
+    result = tempalte.render({"page":page})
+    return HttpResponse(result)
