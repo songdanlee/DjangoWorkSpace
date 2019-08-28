@@ -6,16 +6,17 @@ from django.shortcuts import render_to_response
 def newList(request):
     tempalte = get_template("newlist.html")
     result = tempalte.render({})
-
     return HttpResponse(result)
 
-def index(request):
 
-    return render_to_response("index.html",{"username":"songdan"})
+def index(request):
+    return render_to_response("index.html", {"username": "songdan"})
+
 
 def new(request):
+    name = "1234"
+    return render_to_response("about.html", locals())
 
-    return render_to_response("about.html")
 
 def listpic(request):
     return render_to_response("listpic.html")
