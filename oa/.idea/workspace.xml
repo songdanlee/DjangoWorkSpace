@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8327cd33-c660-4c34-a7d8-9c0009180cf0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../ArticleBlog_v1_1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ArticleBlog_v1_1/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hrs/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/hrs/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hrs/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/hrs/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oa/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/oa/__init__.py" afterDir="false" />
-    </list>
+    <list default="true" id="8327cd33-c660-4c34-a7d8-9c0009180cf0" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,8 +78,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="393" />
-    <option name="y" value="91" />
+    <option name="x" value="-205" />
+    <option name="y" value="146" />
     <option name="width" value="1600" />
     <option name="height" value="860" />
   </component>
@@ -173,15 +167,15 @@
       <option name="presentableId" value="Default" />
       <updated>1566915224942</updated>
       <workItem from="1566915226537" duration="2944000" />
-      <workItem from="1567002006673" duration="2090000" />
+      <workItem from="1567002006673" duration="2151000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5034000" />
+    <option name="totallyTimeSpent" value="5095000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="393" y="91" width="1600" height="860" extended-state="0" />
+    <frame x="-205" y="146" width="1600" height="860" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25458115" />

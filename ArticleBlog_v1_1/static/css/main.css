@@ -315,6 +315,14 @@ a.readmore {
 	font-size: 40px;
 	color: #aeaeae
 }
+.dtxw li:nth-child(7)::before {
+    content: "07";
+    position: absolute;
+    left: 40px;
+    top: 40px;
+    font-size: 40px;
+    color: #aeaeae;
+}
 .dttext span {
 	text-align: right;
 	float: right;

@@ -36,3 +36,18 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+if __name__ == '__main__':
+    article = Article()
+    article.title = "菊花台"
+    article.article_author = Author.objects.get(id=1)
+    article.desciption = "你的泪光柔弱中带伤"
+    article.content = "菊花灿烂的伤，你的笑容已泛黄"
+    import datetime
+    article.public_time = datetime.datetime.now()
+    article.picture = "images/st.jpg"
+    article.save()
+    article.article_type.add(ArticleType.objects.get(id=1))
+    article.article_type.add(ArticleType.objects.get(id=2))
+    article.article_type.add(ArticleType.objects.get(id=3))
+    article.save()
