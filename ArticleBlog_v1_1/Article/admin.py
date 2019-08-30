@@ -14,7 +14,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'desciption','content','public_time','picture','article_author_id')
+    list_display = ('id', 'title', 'description','content','public_time','picture','article_author_id')
     ordering = ('id',)
 
 

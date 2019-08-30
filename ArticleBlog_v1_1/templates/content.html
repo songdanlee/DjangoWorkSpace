@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    博客文章页
+{% endblock %}
+
+{% block content %}
+       <div class="about_box">
+        <div class="f_box">
+          <p class="a_title">{{ article.title }}</p>
+          <p class="p_title"></p>
+        </div>
+        <ul class="about_content">
+          <p> {{ article.content}} </p>
+          <p><img src="/static/{{ article.picture }}"></p>
+        </ul>
+       </div>
+
+{% endblock %}

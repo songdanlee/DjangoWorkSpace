@@ -16,15 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,re_path
 from django.views.static import serve
-from ArticleBlog_v1_1.views import *
+# from ArticleBlog_v1_1.views import *
+from Article.views import *
 from ArticleBlog_v1_1.settings import MEDIA_ROOT
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path('^media/(?P<path>.*)$', serve,{"document_root":MEDIA_ROOT}),
     path('index/', index),
     re_path(r"^$", index),
-    path('newList/', newList),
-    path('new/', new),
+
+    re_path(r'newList/(?P<types>\w+)/(?P<p>\d{1,3})', newList),
+    re_path('about', about),
+    re_path('content/(?P<id>\d{1,3})', content),
+
+
     path('listpic/', listpic),
+
 ]

@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'ArticleBlog_v1_1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'articleblog',# 数据库名
+        'NAME': 'articleblog',# 数据库名articleblog
         'HOST': 'localhost',# 数据库主机地址
         'USER': 'root',# 用户名
         'PASSWORD': '1234',# 密码

@@ -1,14 +1,14 @@
 {% extends 'base.html'%}
 {% block content %}
     <div class="about_box">
-      <h2 class="nh1"><span>您现在的位置是：<a href="/" target="_blank">网站首页</a>>><a href="#" target="_blank">个人日记</a></span><b>个人日记</b></h2>
+      <h2 class="nh1"><span>您现在的位置是：<a href="/" target="_blank">{{ types }}</a>>><a href="#" target="_blank">{{ types }}</a></span><b>{{ types }}</b></h2>
       <div class="dtxw box">
-        {% for art in article_list %}
+        {% for art in page_article %}
         <li>
           <div class="dttext f_l">
             <ul>
-              <h2><a href="/">{{ art.title }}</a></h2>
-              <p>{{ art.desciption }}</p>
+              <h2><a href="/content/{{ art.id}}">{{ art.article_type.1 }}{{ art.title }}</a></h2>
+              <p>{{ art.description }}</p>
               <span>{{ art.public_time }}</span>
             </ul>
           </div>
@@ -17,6 +17,24 @@
 
         {% endfor %}
       </div>
-      <div class="pagelist">页次：1/1 每页25 总数10<a href="/">首页</a><a href="/">上一页</a><a href="/">下一页</a><a href="/">尾页</a></div>
-    </div>
+
+      <div class="pagelist">页次：{{ p }}/{{ article_list.num_pages}} 每页{{ page_size }} 总数{{ page_article.count }}
+          <a href="/newList/{{ types }}/1/">首页</a>
+          {%if  p >  1 %}
+             <a href="/newList/{{ types }}/{{ p|add:-1 }}/" >上一页</a>
+          {% endif %}
+
+
+          {% for p in page_range %}
+               <a href="/newList/{{ types }}/{{ p }}">{{ p }}</a>
+          {% endfor %}
+
+
+          {%if  p <  article_list.num_pages %}
+              <a href="/newList/{{ types }}/{{ p|add:1 }}/">下一页</a>
+          {% endif %}
+
+
+          <a href="/newList/{{ types }}/{{ article_list.num_pages }}/">尾页</a></div>
+      </div>
 {% endblock %}
