@@ -1,7 +1,9 @@
 import math
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response,render
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+
 
 from Article.models import *
 
@@ -63,6 +65,31 @@ def listpic(request):
 
 def about(request):
     return render_to_response("about.html")
+
+
+def img(request):
+
+    return render(request, 'img.html')
+
+
+def getImgs(request):
+
+    nid = request.GET.get('nid')
+
+
+    # nid 第一次取为 0，每次取 7 条
+    last_position_id = int(nid) + 10
+    postion_id = str(last_position_id)
+
+    # 获取 0 < id < 7 的数据
+    img_list = Img.objects.filter(id__gt=nid, id__lt=postion_id).values('id', 'title', 'src')
+    img_list = list(img_list)   # 将字典格式转换为列表形式
+    ret = {
+        'status': True,
+        'data': img_list
+    }
+
+    return JsonResponse(ret)
 
 if __name__ == '__main__':
     # article_list = Article.objects.all(); # 查询所有

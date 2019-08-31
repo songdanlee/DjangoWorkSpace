@@ -9,7 +9,7 @@ class Author(models.Model):
     birthday = models.DateField()
     email = models.EmailField()
     address = models.TextField()
-    photo = models.ImageField(upload_to="images")
+    photo = models.ImageField(upload_to="images/img")
 
     def __str__(self):
         return self.name
@@ -40,6 +40,21 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+
+class Img(models.Model):
+    """
+    upload_to: 上传文件地址
+    """
+    src = models.FileField(max_length=64, verbose_name='图片地址', upload_to='app/static/app/upload')
+    title = models.CharField(max_length=64, verbose_name='标题')
+    summary = models.CharField(max_length=128, verbose_name='简介')
+
+    class Meta:
+        verbose_name_plural = '图片'
+
+    def __str__(self):
+        return self.title
+
 if __name__ == '__main__':
     # article = Article()
     # article.title = "菊花台"
@@ -57,8 +72,9 @@ if __name__ == '__main__':
     # article.save()
 
 
-    atype = ArticleType.objects.get(id=4) # 个人日记
-    articles = Article.objects.filter(id__gt=150).all()
-    for i in articles:
-        i.article_type.add(atype)
-        i.save()
+    # atype = ArticleType.objects.get(id=4) # 个人日记
+    # articles = Article.objects.filter(id__gt=150).all()
+    # for i in articles:
+    #     i.article_type.add(atype)
+    #     i.save()
+    pass
