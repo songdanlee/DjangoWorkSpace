@@ -47,16 +47,13 @@ def index(request):
     new_article = Article.objects.order_by("-public_time")[:6]
     recomm_article = Article.objects.filter(recomment=1).order_by("-public_time")[:8]
     click_artcle = Article.objects.order_by("-click")[:8]
+    username="songdan_lee"
+    # print(username)
     return render_to_response("index.html", locals())
 
 
 def content(request,id):
     article = Article.objects.get(id=id)
-    print("id",article.id)
-    print("title",article.title)
-    print("description",article.description)
-    print("content",article.content)
-    print("picture",article.picture)
     return render_to_response("content.html", locals())
 
 

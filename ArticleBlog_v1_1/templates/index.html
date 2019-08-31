@@ -7,11 +7,11 @@
   <div class="container">
     <div class="bloglist f_l">
         {% for art in new_article %}
-              <h3><a href="/jstt/bj/2017-07-13/784.html">{{ art.title }}</a></h3>
+              <h3><a href="/content/{{ art.id }}">{{ art.title }}</a></h3>
               <figure><img src="/static/{{ art.picture}}" alt="{{ art.title }}"></figure>
               <ul>
                 <p>{{ art.description }}</p>
-                <a title="【{{ art.article_type.1 }}】{{ art.title }}" href="/content/{{ art.id }}" target="_blank" class="readmore">阅读全文&gt;&gt;</a>
+                <a title="【{{ art.article_type.1 }}】{{ art.title }}" href="/content/{{ art.id }}" class="readmore">阅读全文&gt;&gt;</a>
               </ul>
               <p class="dateview"><span>{{ art.public_time }}</span><span>作者：{{ art.article_author }}</span>
               <span>标签：[
@@ -25,12 +25,12 @@
     </div>
     <div class="r_box f_r">
       <div class="tit01">
-        <h3 class="tit">关注{{ username }}</h3>
+        <h3 class="tit">{{ username }}的联系方式</h3>
         <div class="gzwm">
-          <ul>
-            <li><a class="email" href="#" target="_blank">我的电话</a></li>
-            <li><a class="qq" href="#mailto:admin@admin.com" target="_blank">我的邮箱</a></li>
-            <li><a class="tel" href="#" target="_blank">我的QQ</a></li>
+             <ul>
+            <li><a style="background-image: url('/static/images/weibo.png')" href="https://weibo.com/leesongdan" target="_blank">我的微博</a></li>
+            <li><a class="qq" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=OQsMCgoPCg8KDgh5SEgXWlZU" target="_blank">我的邮箱</a></li>
+            <li><a class="tel" href="tencent://message/?Menu=yes&uin=2533636371&Service=300&sigT=45a1e5847943b64c6ff3990f8a9e644d2b31356cb0b4ac6b24663a3c8dd0f8aa12a595b1714f9d45" target="_blank">我的QQ</a></li>
             <li><a class="prize" href="#">个人奖项</a></li>
           </ul>
         </div>
@@ -58,7 +58,7 @@
         <h3 class="tit">点击排行</h3>
         <ul class="rank">
             {% for art in click_artcle %}
-              <li><a href="/content/{{ art.id }}" title="{{ art.title }}" target="_blank">{{ art.title }}</a></li>
+              <li><a href="/content/{{ art.id }}" title="{{ art.title }}" >{{ art.title }}</a></li>
             {% endfor %}
         </ul>
       </div>
