@@ -21,9 +21,3 @@ from Article.views import *
 from ArticleBlog_v1_1.settings import MEDIA_ROOT
 
 
-urlpatterns = [
-
-    path('img/', img, name='img'),
-    path('getImgs/', getImgs, name='getImgs'),
-
-]

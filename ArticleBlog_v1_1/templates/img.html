@@ -35,13 +35,25 @@
         </ul>
       </div>
     </div>
-
+ <div class="about_box">
+      <div class="lispic">
 <div class="w" id="container">
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
+    <div class="item">
+        <ul>
+        </ul>
+    </div>
+    <div class="item">
+        <ul></ul>
+    </div>
+    <div class="item">
+        <ul></ul>
+
+    </div>
+    <div class="item">
+        <ul></ul>
+    </div>
 </div>
+      </div>
   <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
 <script>
     $(function () {
@@ -56,7 +68,7 @@
         this.fetchImg = function () {
             var that = this;
             $.ajax({
-                url: '/Article/getImgs/',
+                url: '/getImgs/',
                 type: 'GET',
                 data: {nid: that.NID},
                 dataType: 'JSON',
@@ -66,8 +78,14 @@
                         var eqv = (index + that.LASTPOSITION + 1) % 4;
                         //console.log(eqv);
                         var tag = document.createElement('img');
+                        var lli = document.createElement('li');
+
                         tag.src = '/static/' + v.src;
-                        $('#container').children().eq(eqv).append(tag);
+
+                        $('#container').children().eq(eqv).children().append(lli);
+                        $('#container:nth-child(eqv) ul li').append(tag)
+                        //$('#container').children().eq(eqv).children().eq(1).children("img:last-child").append(tag)
+                      // console.log($('#container').children().eq(eqv).children().eq(1).children("a:last-child"))
                         if (index + 1 == img_list.length) {
                             that.LASTPOSITION = eqv;
                             that.NID = v.id;

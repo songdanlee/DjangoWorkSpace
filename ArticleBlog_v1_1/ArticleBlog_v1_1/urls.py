@@ -16,12 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,re_path,include
 from django.views.static import serve
-# from ArticleBlog_v1_1.views import *
-from Article.views import *
+from ArticleBlog_v1_1.views import *
+# from Article.views import *
 from ArticleBlog_v1_1.settings import MEDIA_ROOT
 
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     re_path('^media/(?P<path>.*)$', serve,{"document_root":MEDIA_ROOT}),
     path('index/', index),
@@ -32,8 +33,16 @@ urlpatterns = [
     re_path('content/(?P<id>\d{1,3})', content),
 
 
-    path('listpic/', listpic),
+    path('listpic/', img),
+    path('img/', img, name='img'),
+    path('getImgs/', getImgs, name='getImgs'),
 
-    path("Article/",include('Article.urls'))
+
+    # path("request_method/",request_method),
+
+    path("form_get/",form_get),
+    path("form_post/",form_post),
+
+    path("register/",register),
 
 ]

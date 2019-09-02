@@ -3,7 +3,7 @@
     <div class="about_box">
       <h2 class="nh1"><span>您现在的位置是：<a href="/" target="_blank">{{ types }}</a>>><a href="#" target="_blank">{{ types }}</a></span><b>{{ types }}</b></h2>
       <div class="dtxw box">
-        {% for art in page_article %}
+        {% for art in search_list %}
         <li>
           <div class="dttext f_l">
             <ul>
@@ -16,25 +16,8 @@
         </li>
 
         {% endfor %}
+
       </div>
 
-      <div class="pagelist">页次：{{ p }}/{{ article_list.num_pages}} 每页{{ page_size }} 总数{{ article_list.count }}
-          <a href="/newList/{{ types }}/1/">首页</a>
-          {%if  p >  1 %}
-             <a href="/newList/{{ types }}/{{ p|add:-1 }}/" >上一页</a>
-          {% endif %}
-
-
-          {% for p in page_range %}
-               <a href="/newList/{{ types }}/{{ p }}">{{ p }}</a>
-          {% endfor %}
-
-
-          {%if  p <  article_list.num_pages %}
-              <a href="/newList/{{ types }}/{{ p|add:1 }}/">下一页</a>
-          {% endif %}
-
-
-          <a href="/newList/{{ types }}/{{ article_list.num_pages }}/">尾页</a></div>
       </div>
 {% endblock %}

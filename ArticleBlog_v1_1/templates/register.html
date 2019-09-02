@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+</head>
+<body>
+<form action="" method="post">
+    {% csrf_token %}
+    <label>用户名</label>
+    <input type="text" name="username">
+    <br>
+    <label>密&nbsp;&nbsp;&nbsp;码</label>
+    <input type="password" name="password">
+    <br>
+    <input type="submit" value="提交">
+</form>
+{% if username %}
+    <p>username:<span style="color: red">{{ username }} </span></p>
+
+{% endif %}
+{% if password %}
+ <p>password:<span style="color: red">{{ password }} </span></p>
+
+{% endif %}
+</body>
+</html>
