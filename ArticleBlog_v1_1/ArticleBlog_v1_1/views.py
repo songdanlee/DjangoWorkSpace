@@ -6,6 +6,18 @@ from django.http import JsonResponse
 from Article.models import *
 from Article.register import Register
 
+def loginValid(func):
+    def inner(request,*args,**kwargs):
+        username = request.COOKIES.get("username")
+        session_username = request.session.get("username")
+
+        print("session",session_username)
+        if username:
+            return  func(request,*args,**kwargs)
+        else:
+            return HttpResponseRedirect("/login/")
+    return inner
+
 def set_page(page_list,page):
     """
     page_list  # 页码范围
@@ -44,7 +56,7 @@ def newList(request,types,p):
     # print(article_list.num_pages,article_list.page_range,article_list.count)
     return render(request,"newlist.html",locals())
 
-
+@loginValid
 def index(request):
     """
     :param request:
@@ -53,7 +65,7 @@ def index(request):
     new_article = Article.objects.order_by("-public_time")[:6]
     recomm_article = Article.objects.filter(recomment=1).order_by("-public_time")[:8]
     click_artcle = Article.objects.order_by("-click")[:8]
-    username="songdan_lee"
+    username = request.COOKIES.get("username")
     return render(request,"index.html", locals())
 
 
@@ -197,7 +209,7 @@ def check_pass(email,password,d_password): # 登录校验
         if password != d_password:
             return 3
         if password == d_password and setPassword(password) == db_password:
-            return 1
+            return 1,user
         if password != db_password:
             return 2
     return 0
@@ -213,9 +225,11 @@ def login(request):
         d_password = request.POST.get("d_password")
         if email and password and d_password:
             flag = check_pass(email,password,d_password)
-            if flag == 1:
+            if isinstance(flag,tuple) and flag[0] == 1:
                 response = HttpResponseRedirect("/index/") # 重定向
-                response.set_cookie("name","songdan")
+
+                response.set_cookie("username",flag[1].username)
+                request.session['username'] = flag[1].username
                 return response
             else:
                 return render(request, "login.html",{'flag':flag})
@@ -235,3 +249,8 @@ def login_check(request):
     print(sendData)
     return JsonResponse(sendData)
 
+def logout(request):
+    response = HttpResponseRedirect("/index/")
+    response.delete_cookie("username")
+    del request.session["username"]
+    return response

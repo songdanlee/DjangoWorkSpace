@@ -53,4 +53,5 @@ urlpatterns = [
     path("register_check/",register_check), # ajax检测邮箱是否存在
     path("login/",login),
     path("login_check/",login_check),
+    path("logout/",logout),
 ]
