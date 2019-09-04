@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+    <style>
+          body{
+            background-color: green;
+        }
+        form{
+            margin-top: 8%;
+        }
+        input{
+            font-size: 36px;
+            width: 50%;
+            margin-bottom: 20px;
+        }
+        p{
+            text-align: center;
+        }
+        .submit{
+            border: none;
+            color: white;
+            background-color: deepskyblue;
+        }
+
+    </style>
+    <script src="/static/jq/jquery.min.js"></script>
+</head>
+<body>
+
+ <form  method="post">
+        {% csrf_token %}
+        <p>
+            <input type="text"  id="email"  name="email" placeholder="邮箱">
+        </p>
+        <p>
+            <input type="password" name="password" placeholder="密码">
+        </p>
+        <p>
+            <input type="password" name="d_password" placeholder="请重新输入密码">
+        </p>
+        <p>
+            <input class="submit" id="submit" type="submit" value="登录">
+        </p>
+    </form>
+ <input type="hidden" id="hidden" flag = '{{ flag }}'>
+<p id="errmsg" style="color: red;font-size: 20px">
+</p>
+
+    <script>
+    $("#email").blur(function () {
+            var em = $("#email").val();
+
+
+            if(em){
+                var url = '/login_check/?email=' + em;
+                $.ajax({
+                    url: url,
+                    type:'get',
+                    data:"",
+                    success:function (data) {
+                        //data = {'data': '提交成功', 'flag': 0, 'code': 400};
+
+                        if(data['code'] == 200){
+                            console.log(200);
+                            data['code'] = 200;
+                             $("#errmsg").text("");
+                        }else if(data['code'] == 400){
+                            //禁止提交表单
+                            $("#errmsg").text(data['data']);
+                            /*$("form").submit(function(e){
+                                e.preventDefault();
+                                console.log("提交失败："+data['data']+data['code']);
+                            });*/
+                        }
+
+
+                    },
+                    error:function (data) {
+                        $("#errmsg").text("提交失败");
+                    }
+
+                })
+            }
+        })
+    </script>
+
+</body>
+</html>

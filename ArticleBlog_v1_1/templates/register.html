@@ -3,8 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>register</title>
+    <style>
+          body{
+            background-color: coral;
+        }
+        form{
+            margin-top: 8%;
+        }
+        input{
+            font-size: 36px;
+            width: 50%;
+            margin-bottom: 20px;
+        }
+        p{
+            text-align: center;
+        }
+        .submit{
+            border: none;
+            color: white;
+            background-color: springgreen;
+        }
+
+    </style>
+    <script src="/static/jq/jquery.min.js"></script>
 </head>
 <body>
+<!--
 <form action="" method="post">
     {% csrf_token %}
     <label>用户名</label>
@@ -23,5 +47,101 @@
  <p>password:<span style="color: red">{{ password }} </span></p>
 
 {% endif %}
+
+-->
+<!--
+<div>
+    <h5>普通</h5>
+ {{ register_form }}
+</div>
+<div>
+    <h5>as_p</h5>
+ {{ register_form.as_p }}
+</div>
+<div>
+    <h5>as_ul</h5>
+ {{ register_form.as_ul }}
+</div>
+<div>
+    <h5>as_table</h5>
+ {{ register_form.as_table }}
+</div>
+<div>
+    <h5>遍历</h5>
+    <table>
+
+
+    {% for f in register_form %}
+      <tr><th>{{ f.label }}</th>
+      <td> {{ f }}</td>
+
+      </tr>
+    {% endfor %}
+    </table>
+</div>
+-->
+
+ <form method="post">
+        {% csrf_token %}
+        <p>
+            <input type="text" name="username" placeholder="用户名">
+        </p>
+        <p>
+            <input type="text"  id="email"  name="email" placeholder="邮箱">
+        </p>
+        <p>
+            <input type="password" name="password" placeholder="密码">
+        </p>
+        <p>
+            <input type="password" name="d_password" placeholder="密码重复">
+        </p>
+
+        <p>
+            <input class="submit" type="submit" value="注册">
+        </p>
+    </form>
+{% ifequal flag 1 %}
+    <p><h4>提交成功 </h4><p>
+
+{% else %}
+     <p><h4>提交失败 </h4><p>
+
+{% endifequal %}
+<p>
+    {{ data_valid.errors }}
+</p>
+<p id="erremail" style="color: #759b08;font-size: 20px"></p>
+
+    <script>
+
+        $("#email").blur(function () {
+            var em = $("#email").val();
+            var url = '/register_check/?email='+em;
+            if(em){
+                $.ajax({
+                    url:url,
+                    type:'get',
+                    data:"",
+                    success:function (data) {
+                        console.log(data)
+                        $("#erremail").text(data['data'])
+                        if(data['code']==200){
+
+                        } else{
+                             $("#erremail").text(data['data'])
+                           // window.location.reload("/register/")
+                        }
+
+
+                    },
+                    error:function (errmsg) {
+                        $("#erremail").text('提交失败')
+                    }
+                })
+            }
+        })
+
+    </script>
+
 </body>
 </html>

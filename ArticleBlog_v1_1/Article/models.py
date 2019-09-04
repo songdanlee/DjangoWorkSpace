@@ -1,6 +1,7 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 
+
 # Create your models here.
 class Author(models.Model):
     name = models.CharField(max_length=32)
@@ -58,6 +59,9 @@ class Img(models.Model):
 class User(models.Model):
     username = models.CharField(max_length=32)
     password = models.CharField(max_length=32)
+    email = models.EmailField()
+
+from functools import partial
 
 if __name__ == '__main__':
     # article = Article()

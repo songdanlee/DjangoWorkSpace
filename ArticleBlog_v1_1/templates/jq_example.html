@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/jq/jquery.min.js"></script>
+</head>
+<body>
+
+    <input type="text" id="content" >
+    <input type="button" id = "button"  value="button">
+
+    <script>
+
+        $(function () {
+             $("#button").click(
+                 function () {
+                    $.ajax(
+                        {
+                             url:"/ajaxgetdata/",
+                             type:"get",
+                             data:"",
+                             success:function (data) {
+                                 $("#content").val(data['hello'])
+                             },
+                             error:function (data) {
+                                 $("#content").val("提交失败")
+                             }
+                        }
+
+                    )
+                 }
+             )
+        })
+
+    </script>
+
+</body>
+</html>

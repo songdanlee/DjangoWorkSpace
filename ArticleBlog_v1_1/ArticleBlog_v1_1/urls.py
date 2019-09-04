@@ -34,15 +34,23 @@ urlpatterns = [
 
 
     path('listpic/', img),
-    path('img/', img, name='img'),
+    # path('img/', img, name='img'),
     path('getImgs/', getImgs, name='getImgs'),
 
 
     # path("request_method/",request_method),
 
-    path("form_get/",form_get),
+    # path("form_get/",form_get),
     path("form_post/",form_post),
 
     path("register/",register),
 
+    # path("jq_exam/",jq_exam),
+    # path("ajaxgetdata/",ajax_get_page),
+
+    # path("jq_post_exam/",jq_post_exam),
+    # path("ajaxpostdata/",ajax_post_page),
+    path("register_check/",register_check), # ajax检测邮箱是否存在
+    path("login/",login),
+    path("login_check/",login_check),
 ]

@@ -1,11 +1,10 @@
 import hashlib
 
-from django.shortcuts import render_to_response,render
+from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from django.template import RequestContext
 from Article.models import *
-
+from Article.register import Register
 
 def set_page(page_list,page):
     """
@@ -29,9 +28,10 @@ def newList(request,types,p):
     :param request:
     :param types: 文章类型
     :param p: 页码
-    :return:
+    :return: 对应类型，对应页码的文章列表
     """
     p = int(p)
+
     page_size = 6
     # print(type(types),types,p)
     articles = ArticleType.objects.get(label=types).article_set.order_by("-public_time")
@@ -42,11 +42,14 @@ def newList(request,types,p):
     page_range = set_page(article_list.page_range,p)
     # article_list.num_pages 总页码数，article_list.page_range 下标从 1 开始的页数范围迭代器，article_list.count表示所有页面的对象总数
     # print(article_list.num_pages,article_list.page_range,article_list.count)
-
     return render(request,"newlist.html",locals())
 
 
 def index(request):
+    """
+    :param request:
+    :return:  new_article 最新的6条文章; recomm_article推荐的前8条数据；click_artcle 点击最高的前8条数据
+    """
     new_article = Article.objects.order_by("-public_time")[:6]
     recomm_article = Article.objects.filter(recomment=1).order_by("-public_time")[:8]
     click_artcle = Article.objects.order_by("-click")[:8]
@@ -54,25 +57,20 @@ def index(request):
     return render(request,"index.html", locals())
 
 
-def content(request,id):
+def content(request,id): # 根据id 获取文章
     article = Article.objects.get(id=id)
     return render(request,"content.html", locals())
 
 
-def listpic(request):
-    return render(request,"img.html")
-
-
-def about(request):
+def about(request): # 个人简介
     return render(request,"about.html")
 
 
-def img(request):
+def img(request):  # 展示图片页面
     return render(request, 'img.html')
 
 
-def getImgs(request):
-
+def getImgs(request): # 瀑布流 ajax 获取图片
     nid = request.GET.get('nid')
     # nid 第一次取为 0，每次取 7 条
     last_position_id = int(nid) + 7
@@ -84,36 +82,30 @@ def getImgs(request):
         'status': True,
         'data': img_list
     }
-
     return JsonResponse(ret)
 
 
-def new(request):
-    article = Article.objects.get(id=1)
-    return render(request,"about.html", locals())
-
-
-def listpic(request):
+def listpic(request): # 图片页
     return render(request,"listpic.html",locals())
 
 
-def request_method(request):
+def request_method(request): # 查看request 的方法
     request_method = request.__dir__()
     req_arg = request.META.items()
     return render(request,"request_method.html",locals())
 
 
-def form_get(request):
+# def form_get(request): # 首页get 表单搜索文章
+#
+#     value = request.GET.get("keyboard")
+#
+#     search_list = []
+#     if value:
+#         search_list = Article.objects.filter(title__contains=value)
+#     return render("search_list.html",locals())
 
-    value = request.GET.get("keyboard")
 
-    search_list = []
-    if value:
-        search_list = Article.objects.filter(title__contains=value)
-    return render("search_list.html",locals())
-
-
-def form_post(request):
+def form_post(request): # 首页post 表单搜索文章
     value = request.POST.get("keyboard")
     search_list = []
     if value:
@@ -121,19 +113,114 @@ def form_post(request):
     return render(request,"search_list.html",locals())
 
 
-def setPassword(password):
+def setPassword(password): # 加密
     md5 = hashlib.md5()
     md5.update(password.encode())
     result = md5.hexdigest()
     return result
 
-def register(request):
+def check_eamil_exists(email):
+    """
+    :param email:
+    :return:  1 email 存在， 0 email 不存在
+    """
+    return 1 if User.objects.filter(email=email).first() else 0
+
+
+def register(request): # 注册
+    register_form = Register()
+
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        if username and password:
-            user = User()
-            user.username = username
-            user.password = setPassword(password)
-            user.save()
+
+        data_valid = Register(request.POST)
+
+        if data_valid.is_valid():
+            clean_data = data_valid.cleaned_data
+            username = clean_data.get("username")
+            email = clean_data.get("email")
+            password = clean_data.get("password")
+            d_password = clean_data.get("d_password")
+            if check_eamil_exists(email) == 1: # 邮箱存在
+                data_valid.add_error("email", "邮箱已经存在")
+
+            elif password == d_password: # 密码一致
+                user = User()
+                user.username = username
+                user.password = setPassword(password)
+                user.email = email
+                user.save()
+                flag = 1
+            else: # 密码不一致
+                data_valid.add_error("password","两次密码不一致")
+
     return render(request,"register.html",locals())
+
+
+def jq_exam(request):
+    return render(request,"jq_example.html")
+
+
+from django.http import JsonResponse
+
+
+def ajax_get_page(request):
+    return JsonResponse({'hello': 'world'})
+
+
+def jq_post_exam(request): #post 页面
+    return render(request,"jq_post_example.html")
+
+
+def ajax_post_page(request): # ajax post 提交 视图
+    name = request.POST.get("name")
+    print(name)
+    return JsonResponse({"name":name})
+
+def register_check(request): # 检测
+
+    email = request.GET.get("email")
+    sendData = {'code':400,'data':''}
+
+    if email:
+        flag = check_eamil_exists(email)
+        if flag == 1:
+            sendData['data'] = '邮箱已经存在'
+        else:
+            sendData['code'] = 200
+            sendData['data'] = '邮箱可以使用'
+    else:
+        sendData['data'] = '邮箱为空'
+    return JsonResponse(sendData)
+
+def check_pass(email,password,d_password):
+    user = User.objects.filter(email=email,password=setPassword(password)).first()
+    print(user)
+    if user and password == d_password:
+        return 1
+    return 0
+
+def login(request):
+    sendData = {'flag': 1}
+    if request.method == 'POST':
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        d_password = request.POST.get("d_password")
+        if email and password and d_password:
+            if check_pass(email,password,d_password):
+                return render(request, "login_success.html")
+    return render(request, "login.html",sendData)
+
+
+def login_check(request):
+    sendData = {'code': 400, 'data': '','flag':0}
+    if request.method == 'GET':
+        email = request.GET.get('email')
+        if email:
+            if check_eamil_exists(email) == 1:
+                sendData['code'] = 200
+                sendData['data'] = '提交成功'
+            else:
+                sendData['data'] = '邮箱未注册账号'
+    print(sendData)
+    return JsonResponse(sendData)
+
