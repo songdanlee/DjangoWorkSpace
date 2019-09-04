@@ -176,11 +176,9 @@ def ajax_post_page(request): # ajax post 提交 视图
     print(name)
     return JsonResponse({"name":name})
 
-def register_check(request): # 检测
-
+def register_check(request): # 检测邮箱
     email = request.GET.get("email")
     sendData = {'code':400,'data':''}
-
     if email:
         flag = check_eamil_exists(email)
         if flag == 1:
@@ -192,27 +190,40 @@ def register_check(request): # 检测
         sendData['data'] = '邮箱为空'
     return JsonResponse(sendData)
 
-def check_pass(email,password,d_password):
-    user = User.objects.filter(email=email,password=setPassword(password)).first()
-    print(user)
-    if user and password == d_password:
-        return 1
+def check_pass(email,password,d_password): # 登录校验
+    user = User.objects.filter(email=email).first()
+    if user:
+        db_password = user.password
+        if password != d_password:
+            return 3
+        if password == d_password and setPassword(password) == db_password:
+            return 1
+        if password != db_password:
+            return 2
     return 0
 
+
+from django.http import HttpResponseRedirect
+
+
 def login(request):
-    sendData = {'flag': 1}
     if request.method == 'POST':
         email = request.POST.get("email")
         password = request.POST.get("password")
         d_password = request.POST.get("d_password")
         if email and password and d_password:
-            if check_pass(email,password,d_password):
-                return render(request, "login_success.html")
-    return render(request, "login.html",sendData)
+            flag = check_pass(email,password,d_password)
+            if flag == 1:
+                response = HttpResponseRedirect("/index/") # 重定向
+                response.set_cookie("name","songdan")
+                return response
+            else:
+                return render(request, "login.html",{'flag':flag})
+    return render(request, "login.html")
 
 
 def login_check(request):
-    sendData = {'code': 400, 'data': '','flag':0}
+    sendData = {'code': 400, 'data': ''}
     if request.method == 'GET':
         email = request.GET.get('email')
         if email:

@@ -44,14 +44,25 @@
             <input class="submit" id="submit" type="submit" value="登录">
         </p>
     </form>
- <input type="hidden" id="hidden" flag = '{{ flag }}'>
 <p id="errmsg" style="color: red;font-size: 20px">
 </p>
+
+ <p id="erromsg" style="color: red;font-size: 20px">
+    {% ifequal flag 3 %}
+        <span>两次密码不一致</span>
+    {% endifequal %}
+ {% ifequal flag 2 %}
+        <span>密码错误</span>
+    {% endifequal %}
+ {% ifequal flag 0 %}
+        <span>邮箱未注册</span>
+    {% endifequal %}
+</p>
+
 
     <script>
     $("#email").blur(function () {
             var em = $("#email").val();
-
 
             if(em){
                 var url = '/login_check/?email=' + em;

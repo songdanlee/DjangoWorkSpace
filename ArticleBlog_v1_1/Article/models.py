@@ -4,6 +4,7 @@ from ckeditor.fields import RichTextField
 
 # Create your models here.
 class Author(models.Model):
+
     name = models.CharField(max_length=32)
     age = models.IntegerField()
     gender = models.CharField(max_length=16)
