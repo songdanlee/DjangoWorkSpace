@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    商品列表
+{% endblock %}
+
+{% block style %}
+    <script src="/static/vendor/vue/vue.min.js"></script>
+    <script src="/static/vendor/vue/vue-resource.js"></script>
+{% endblock %}
+
+
+
+
+{% block content %}
+  <div id="vue_content">
+    <!-- DataTales Example -->
+    {% verbatim %}
+     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">
+                <span>
+                     <span v-if="status === 1">在售商品</span>
+                     <span v-else-if="status === 0">已下架商品</span>
+                </span>
+            </h1>
+     </div>
+
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">商品列表</h6>
+        </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>商品编号</th>
+                            <th>商品名称</th>
+                            <th>商品价格</th>
+                            <th>商品数量</th>
+                            <th>商品产地</th>
+                            <th>商品保质期</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="p in goods_lists">
+                            <td> {{ p.goods_num }}</td>
+                            <td> {{ p.goods_name }}</td>
+                            <td> {{ p.goods_price }}</td>
+                            <td> {{ p.goods_count }}</td>
+                            <td> {{ p.goods_location }}</td>
+                            <td> {{ p.goods_save_month }}</td>
+                            <td>
+                                <button class="btn btn-primary">编辑</button>
+                                <span v-if="p.goods_status === 1">
+                              <a class="btn btn-danger" v-bind:href="'/goods_status/down/'+p.id+'/'">下架</a>
+                          </span>
+                                <span v-else="p.goods_status === 0">
+                               <a class="btn btn-danger" v-bind:href="'/goods_status/up/'+p.id+'/'">上架</a>
+                          </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <ul class="pagination" style="float: right;margin-right: 100px;">
+                <li class="paginate_button page-item previous " id="dataTable_previous">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                </li>
+                <li class="paginate_button page-item" v-for="p in page_range">
+                     <span v-if="status === 1">
+                          <a v-bind:href="'/goods_list/'+p+'/up/'" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">{{ p }}</a>
+                    </span>
+                    <span v-if="status === 0">
+                         <a v-bind:href="'/goods_list/'+p+'/down/'" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">{{ p }}</a>
+                    </span>
+                </li>
+                <li class="paginate_button page-item next" id="dataTable_next"><a href="#" aria-controls="dataTable"
+                                                                                  data-dt-idx="7" tabindex="0"
+                                                                                  class="page-link">Next</a></li>
+            </ul>
+        </div>
+
+
+    </div>
+    {% endverbatim %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        Vue.use(VueResource);
+        var status = 0;
+        var vue = new Vue(
+            {
+                el: "#vue_content",
+                data: {
+                    "goods_lists": [],
+                    "page_range": [1, 2, 3, 4, 5, 6],
+                    "status":status
+                },
+                created: function () {
+                    var url = "/goods_list_api/1/up/";
+                    this.$http.get(url).then(
+                        function (data) {
+                            this.goods_lists = data['data']['goods_lists'];
+                            this.page_range = data['data']['page_range'];
+                            this.status = data['data']['status'];
+                            status = this.status;
+                        }, function (error) {
+                            console.log(error)
+                        }
+                    )
+                }
+            }
+        );
+
+    </script>
+{% endblock %}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="/static/vendor/vue/vue.min.js"></script>
+</head>
+<body>
+ {% verbatim %}
+    <div id="panel">
+        <p>内容绑定{{ name }}</p>
+        <hr>
+        <p v-bind:id="style">
+            属性绑定
+        </p>
+        <hr>
+        <p v-if="gender">
+            判断绑定  v-if
+        </p>
+         <hr>
+        <p v-show="gender">
+            判断绑定  v-if
+        </p>
+        <hr>
+        <button v-on:click="alert">click</button>
+        <p v-for="p in project">{{ p }}</p>
+    </div>
+
+
+ {% endverbatim %}
+
+<script>
+
+    var vue = new Vue(
+        {
+            el:"#panel",
+            data:{
+                name:"songdan",
+                style:"red",
+                gender:0,
+                project:["python","java","php",'linux']
+            },
+            methods:{
+                "alert":function () {
+                    alert("hello")
+                }
+            }
+
+        }
+    )
+
+
+</script>
+</body>
+</html>

@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,re_path
 
 from LoginUser.views import *
 
@@ -24,4 +24,20 @@ urlpatterns = [
     path('index/', index),
     path('login/', login),
     path('logout/', logout),
+    path('goods_list/', goods_list),
+    re_path('goods_list/(?P<page>\d+)/(?P<status>\w+)/', goods_list),
+    re_path('goods_status/(?P<state>\w+)/(?P<id>\d+)/', goods_status),
+    # path('goods_add/', goods_add),
+    # path('goods_update/', goods_update),
 ]
+
+
+from django.views.decorators.csrf import csrf_exempt
+
+
+urlpatterns += [
+    re_path('goods_list_api/(?P<page>\d+)/(?P<status>\w+)/', goods_list_api),
+    path('vue/', vue),
+    path('goods/', csrf_exempt(Goods.as_view())),
+]
+
