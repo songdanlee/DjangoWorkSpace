@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,re_path
+from django.urls import path,re_path,include
 
 from LoginUser.views import *
 
@@ -25,6 +25,7 @@ urlpatterns = [
     path('login/', login),
     path('logout/', logout),
     path('goods_list/', goods_list),
+    path('personal_info/', personal_info),
     re_path('goods_list/(?P<page>\d+)/(?P<status>\w+)/', goods_list),
     re_path('goods_status/(?P<state>\w+)/(?P<id>\d+)/', goods_status),
     # path('goods_add/', goods_add),
@@ -34,10 +35,19 @@ urlpatterns = [
 
 from django.views.decorators.csrf import csrf_exempt
 
+from rest_framework import routers
+
+
+routers = routers.DefaultRouter() #路由集
+routers.register("user",UserViewSet) # 注册路由
+routers.register("goods",GoodViewSet) # 注册路由
+
 
 urlpatterns += [
     re_path('goods_list_api/(?P<page>\d+)/(?P<status>\w+)/', goods_list_api),
     path('vue/', vue),
-    path('goods/', csrf_exempt(Goods.as_view())),
+    # 禁止csrf校验
+    path('goods/', csrf_exempt(GoodsView.as_view())),
+    re_path("^API/",include(routers.urls)) # 定义主路由
 ]
 

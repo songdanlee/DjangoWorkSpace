@@ -1,6 +1,7 @@
+#coding=utf-8
 import hashlib
 
-from django.shortcuts import render,HttpResponseRedirect,HttpResponse
+from django.shortcuts import render,HttpResponseRedirect,HttpResponse,render_to_response
 from LoginUser.models import *
 
 
@@ -106,6 +107,7 @@ def index(request):
     :param request:
     :return:
     """
+
     return render(request,"index.html",locals())
 
 from django.core.paginator import Paginator
@@ -132,6 +134,42 @@ def goods_status(request,state,id):
         goods.goods_status = 0
     goods.save()
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
+@loginValid
+def personal_info(request):
+    # 个人信息 展示
+    id = int(request.COOKIES.get("id"))
+    user = LoginUser.objects.get(id=id)
+
+    if request.method == "POST":
+
+        username = request.POST.get("username")
+        gender = request.POST.get("gender")
+        age = request.POST.get("age")
+        phone_number = request.POST.get("phone_number")
+        photo = request.FILES.get("photo")
+        address = request.POST.get("address")
+
+        if username:
+            user.username = username
+        if gender:
+            user.gender = gender
+        if age:
+            user.age = age
+        if phone_number:
+            user.phone_num = phone_number
+        if photo:
+            user.photo = photo
+        if address:
+            user.address = address
+        user.save()
+
+    respon = render(request, "personal_info.html", locals())
+    respon.set_cookie("username", user.username)
+
+    return respon
+
 
 from django.http import JsonResponse
 
@@ -225,36 +263,99 @@ def logout(request):
 def vue(request):
     return render(request,"vue_goods.html")
 
-
+import json
 from django.views import View
 
-class Goods(View):
+class GoodsView(View):
 
     def __init__(self,**kwargs):
-        super(Goods, self).__init__(**kwargs)
+        super(GoodsView,self).__init__(**kwargs)
         self.result = {
+            "version":"1.0",
             "code":200,
-            "data":"",
+            "data":None,
         }
         self.obj = Goods
-
-
 
     def get(self,request):
         id = request.GET.get("id")
         if id:
-            goods = self.obj.objects.get(id=id)
+            goods = self.obj.objects.get(id=int(id))
+            data = {
+                "goods_num":goods.goods_num,
+                "goods_name":goods.goods_name,
+                "goods_status":1,
+                "goods_price":goods.goods_price,
+                "goods_save_month":goods.goods_save_month,
+                "goods_pro_date":goods.goods_pro_date,
+                "goods_location":goods.goods_location,
+                "goods_count":goods.goods_count,
+            }
+
         else:
             goods = self.obj.objects.all()
+            data = []
+            for good in goods:
+                data.append({
+                    "goods_num": good.goods_num,
+                    "goods_name": good.goods_name,
+                    "goods_status": 1,
+                    "goods_price": good.goods_price,
+                    "goods_save_month": good.goods_save_month,
+                    "goods_pro_date": good.goods_pro_date,
+                    "goods_location": good.goods_location,
+                    "goods_count": good.goods_count,
+                })
 
-        return JsonResponse({"method":'get',"status":1})
+        self.result['data'] = data
+        return JsonResponse(self.result)
 
     def post(self,request):
-        return JsonResponse({"method":'post',"status":2})
+        good = self.obj()
+        good.goods_num =  request.POST.get("goods_num")
+        good.goods_name =  request.POST.get("goods_name")
+        good.goods_price = request.POST.get("goods_price")
+        good.goods_save_month = request.POST.get("goods_save_month")
+        good.goods_pro_date = request.POST.get("goods_pro_date")
+        good.goods_location = request.POST.get("goods_location")
+        good.goods_count = request.POST.get("goods_count")
+        good.goods_status = 1
+        good.save()
+        self.result['data']={"id": good.id,"name": good.goods_name, "data": "save success"}
+
+        return JsonResponse(self.result)
 
     def put(self,request):
-        return JsonResponse({"method":'put',"status":3})
+        # print(request.body.decode())
+        result = json.loads(request.body.decode()) # 字符串转为json对象
+        good = self.obj.objects.get(id=result.get("id"))
+        good.goods_num = result.get("goods_num")
+        good.save()
+        self.result['data'] = {
+            "id":good.id,
+            "name":good.goods_num,
+            "data":"修改成功"
+        }
+        return JsonResponse(self.result)
 
-    def delate(self,request):
-        return JsonResponse({"method":'delate',"status":4})
+    def delete(self,request):
+        result = json.loads(request.body.decode())  # 字符串转为json对象
+        self.obj.objects.get(id=result.get("id")).delete()
 
+        self.result['data'] = {
+            "id": result.get("id"),
+            "data": "删除成功"
+        }
+        return JsonResponse(self.result)
+
+from rest_framework import viewsets
+from LoginUser.serializer import UserSerializer,GoodsSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = LoginUser.objects.all() # 接口源数据
+    serializer_class = UserSerializer
+
+class GoodViewSet(viewsets.ModelViewSet):
+    queryset = Goods.objects.all()
+    serializer_class = GoodsSerializer

@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'LoginUser'
+    'LoginUser',
+    "rest_framework"  # 安装rest_framework
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,9 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 # 媒体文件配置,负责图片上传
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'static')
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
