@@ -1,15 +1,20 @@
 # DjangoWorkSpace
 Django代码
 
-访问http://127.0.0.1:8000/getphone/15037609792 ，显示当前时间和手机信息
+ArticleBlog 博客项目
 
-![1566907761067](https://github.com/songdanlee/DjangoWorkSpace/blob/master/assets/1566907761067.png)
+ArticleBlog 博客项目升级（使用app）
 
-访问http://127.0.0.1:8000/article/，显示书籍列表页
+DjangoLogin 后台管理系统
 
-![1566907835065](https://github.com/songdanlee/DjangoWorkSpace/blob/master/assets/1566907835065.png)
+Qshop 在线生鲜系统
 
-点击图片，或者标题可以查看文章内容
 
-![1566907881829](https://github.com/songdanlee/DjangoWorkSpace/blob/master/assets/1566907881829.png)
 
+9-10  完成 Qshop
+
+1. 1.用户登录后，添加session cookie
+2. 模板导航条随着登录状态改变
+3. 添加用户中心，用户登录后可进入
+4. 退出登录，删除cookie 和 session
+5. 商品列表分页
