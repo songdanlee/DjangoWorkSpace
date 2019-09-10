@@ -47,14 +47,20 @@
                 {% endfor %}
 			</ul>
 
-			<div class="pagenation">
-				<a href="#">&lt;上一页</a>
-				<a href="#" class="active">1</a>
-				<a href="#">2</a>
-				<a href="#">3</a>
-				<a href="#">4</a>
-				<a href="#">5</a>
-				<a href="#">下一页&gt;</a>
+            <span style="display: inline-block;float: right;font-size: 10px;">当前页:{{ page }} | 总页: {{ page_list.num_pages }} | 当前页数目:{{  goods_list|length }} | 总数:{{page_list.count }} </span>
+            <div class="pagenation">
+
+			<a href="/Buyer/good_list/1/?type={{ type }}&keyword={{ keyword }}" >首页</a>
+
+                {% for p in pages %}
+                    {% ifequal p page %}
+                        <a href="/Buyer/good_list/{{ p }}/?type={{ type }}&keyword={{ keyword }}" class="active">{{ p }}</a>
+                    {% else %}
+                        <a href="/Buyer/good_list/{{ p }}/?type={{ type }}&keyword={{ keyword }}" >{{ p }}</a>
+                    {% endifequal %}
+                {% endfor %}
+			<a href="/Buyer/good_list/{{ pages|length }}/?type={{ type }}&keyword={{ keyword }}" >尾页</a>
+
 			</div>
 		</div>
 	</div>
