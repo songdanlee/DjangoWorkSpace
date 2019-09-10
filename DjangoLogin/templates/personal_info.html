@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    个人信息
+{% endblock %}
+{% block username %}
+
+
+<span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.username }}</span>
+
+
+{% endblock %}
+{% block label %}
+    个人信息
+{% endblock %}
+
+{% block content %}
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <table class="table " id="dataTable" width="100%" cellspacing="0">
+                        <tr>
+                            <td rowspan=3 width="300px">
+                                <span class="col-xs-6 col-md-3">
+                                  <img  class="img-circle" style="width: 300px;height: 300px;" src="/static/{{ user.photo }}">
+
+                                </span>
+                                <input type="file" name="photo">
+                            </td>
+                            <th>姓名：</th>
+                            <td>
+                                <input type="text" id="username"  value="{{ user.username }}" name="username">
+                               <span id="usrErr"></span>
+                            </td>
+                            <th>性别：</th>
+                            <td><input type="text" id="gender" value="{{ user.gender }}" name="gender"></td>
+                        </tr>
+                        <tr>
+                            <th>年龄：</th>
+                            <td><input type="text" id="age" value="{{ user.age }}" name="age">
+                            <span id="ageErr"></span>
+                            </td>
+                            <th>电话：</th>
+                            <td><input value="{{ user.phone_num }}" id="phone_number" name="phone_number">
+                            <span id="phoneErr"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>邮箱：</th>
+                            <td><input value="{{ user.email }}" id="email" name="email" disabled>
+                            <span id="emailErr"></span>
+                            </td>
+                            <th>地址：</th>
+                            <td><input value="{{ user.address }}" id="address" name="address"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="5" style="text-align: right"><input class="btn btn-warning"
+                                                                             type="submit" value="完善用户信息"></th>
+                        </tr>
+
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block script %}
+    <script>
+        var username=document.getElementById("username");
+        var email=document.getElementById("email");
+        var age=document.getElementById("age");
+        var phone_number=document.getElementById("phone_number");
+        phone_number.onblur=function() {
+            var user_ipt = phone_number.value;//动态获取input输入框的值进行正则表达式判断
+            var pa = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/;
+            if (pa.test(user_ipt)) {
+               document.getElementById("phoneErr").innerHTML="<span class='text-success' >手机格式正确</span>"
+
+            } else {
+               document.getElementById("phoneErr").innerHTML="<span class='text-danger' >手机格式错误</span>"
+
+            }
+        };
+        age.onblur=function() {
+            var user_ipt = age.value;//动态获取input输入框的值进行正则表达式判断
+            if (user_ipt >= 1 && user_ipt <= 180) {
+               document.getElementById("ageErr").innerHTML="<span class='text-success' >年龄输入正确</span>"
+            } else {
+               document.getElementById("ageErr").innerHTML="<span class='text-danger' >年龄输入错误，请输入1-180之间的数字</span>"
+            }
+        };
+        username.onblur=function() {
+            var user_ipt = username.value;//动态获取input输入框的值进行正则表达式判断
+            var pa = /^[\u4e00-\u9fa5·0-9A-z]{1,10}$/;
+            if (pa.test(user_ipt)) {
+               document.getElementById("usrErr").innerHTML="<span class='text-success' >用户名格式正确</span>"
+            } else {
+               document.getElementById("usrErr").innerHTML="<span class='text-danger' >用户名格式错误</span>"
+            }
+        };
+        email.onblur=function(){
+            var e_ipt=email.value;
+            //要求：邮箱的开头不能使用数字及非法字符；.必须在@后面；
+            var pa2=/^[a-z]([a-zA-Z0-9_]{5,20})@([a-z0-9]{1,10})([.]{1})([a-z]{2,4})$/;
+            if (pa2.test(e_ipt)) {
+                document.getElementById("emailErr").innerHTML="<span class='text-success' >用户名格式正确</span>"
+            }else{
+                document.getElementById("emailErr").innerHTML="<span class='text-danger' >用户名格式错误</span>"
+            }
+        }
+</script>
+{% endblock %}
