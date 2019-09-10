@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from Seller.models import *
 from Seller.views import getPassword
+
+
 # Create your views here.
 
 def loginValid(func):
@@ -14,7 +16,6 @@ def loginValid(func):
     def inner(request, *args, **kwargs):
         email = request.COOKIES.get("user")
 
-
         if email and id:
             user = LoginUser.objects.filter(email=email).first()
             if user:
@@ -22,6 +23,7 @@ def loginValid(func):
         return HttpResponseRedirect("/Seller/login/")
 
     return inner
+
 
 def login(request):
     if request.method == "POST":
@@ -32,11 +34,12 @@ def login(request):
             db_password = user.password
             pwd = getPassword(pwd)
             if db_password == pwd:
-                response = HttpResponseRedirect("/Buyer/index/",locals())
+                response = HttpResponseRedirect("/Buyer/index/", locals())
                 response.set_cookie("user", user.email)
                 response.set_cookie("username", user.username)
                 return response
-    return render(request,"buyer/login.html")
+    return render(request, "buyer/login.html")
+
 
 def register(request):
     if request.method == "POST":
@@ -49,8 +52,9 @@ def register(request):
         user.password = getPassword(pwd)
         user.email = email
         user.save()
-        return HttpResponseRedirect("/Buyer/login/",locals())
-    return render(request,"buyer/register.html")
+        return HttpResponseRedirect("/Buyer/login/", locals())
+    return render(request, "buyer/register.html")
+
 
 def index(request):
     types = GoodsType.objects.all()
@@ -58,16 +62,41 @@ def index(request):
     for type in types:
         goods = type.goods_set.all()[0:4]
         if len(goods) >= 4:
-            goods_result.append({type:goods})
-    return render(request,"buyer/index.html",locals())
-
+            goods_result.append({type: goods})
+    return render(request, "buyer/index.html", locals())
 
 
 def logout(request):
-
     response = HttpResponseRedirect("/Buyer/index/")
     cookies = request.COOKIES.keys()
     for cookie in cookies:
         response.delete_cookie(cookie)
 
     return response
+
+
+import math
+
+
+def good_list(request):
+    type = request.GET.get("type")
+    keyword = request.GET.get("keyword")
+    goods_list = []
+    if type == 'byid':
+        if keyword:
+            types = GoodsType.objects.get(id=keyword)
+            goods_list = types.goods_set.order_by("goods_pro_date")
+    elif type == 'bykey':
+        if keyword:
+            goods_list = Goods.objects.filter(goods_name__contains=keyword).order_by("goods_pro_date")
+    if goods_list:
+        nums = goods_list.count()
+        nums = int(math.ceil(nums / 5))
+        recommon_list = goods_list[:nums]
+    return render(request, "buyer/goods_list.html", locals())
+
+
+def good_detail(request,id):
+
+    good = Goods.objects.filter(id = int(id)).first()
+    return render(request,"buyer/detail.html",locals())

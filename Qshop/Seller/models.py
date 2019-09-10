@@ -42,3 +42,5 @@ class Goods(models.Model):
     goods_picture = models.ImageField(upload_to='seller/images',default='seller/images/abc.jpg')
     goods_type = models.ForeignKey(to=GoodsType, on_delete=models.CASCADE,default=1)
     goods_store = models.ForeignKey(to=LoginUser, on_delete=models.CASCADE,default=1)
+
+    goods_description = models.TextField(default="好吃不贵真正实惠，假一赔十")
