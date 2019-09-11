@@ -13,20 +13,20 @@
                 <h3>{{ good.goods_name }}</h3>
                 <p>{{ good.goods_description }}</p>
                 <div class="prize_bar">
-                    <span class="show_pirze">¥<em>{{ good.goods_price|floatformat:2 }}</em></span>
+                    <span class="show_pirze">¥<em id="price">{{ good.goods_price }}</em></span>
                     <span class="show_unit">单  位：500g</span>
                 </div>
                 <div class="goods_num clearfix">
                     <div class="num_name fl">数 量：</div>
                     <div class="num_add fl">
-                        <input type="text" class="num_show fl" value="1">
-                        <a href="javascript:;" class="add fr">+</a>
-                        <a href="javascript:;" class="minus fr">-</a>
+                        <input type="text" id="num" class="num_show fl" value="1">
+                        <a href="javascript:;" id="add" class="add fr">+</a>
+                        <a href="javascript:;" id="sub" class="minus fr">-</a>
                     </div>
                 </div>
-                <div class="total">总价：<em>{{ good.goods_price|floatformat:2 }}元</em></div>
+                <div class="total">总价：<em id="total">{{ good.goods_price }}</em><em>元</em></div>
                 <div class="operate_btn">
-                    <a href="javascript:;" class="buy_btn">立即购买</a>
+                    <a id="buy" href="javascript:;" class="buy_btn">立即购买</a>
                     <a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
                 </div>
             </div>
@@ -68,4 +68,37 @@
     {% else %}
            <p style="text-align: center;color: deepskyblue;font-size: 20px">对不起，没有找到你要的商品</p>
     {% endif %}
+{% endblock %}
+{% block script %}
+    <script>
+        $("#add").click(function () {
+            var price = parseFloat($("#price").text());
+            var num = parseInt($("#num").val());
+            $("#num").val(++num);
+           // console.log(num*price);
+            $("#total").text(num*price);
+        });
+         $("#sub").click(function () {
+            var price = parseFloat($("#price").text());
+            var num = parseInt($("#num").val());
+            --num
+            num = num<=1?1:num;
+            $("#num").val(num);
+           // console.log(num*price);
+            $("#total").text(num*price);
+        });
+         $("#num").mouseout(function () {
+             var price = parseFloat($("#price").text());
+             var num = $("#num").val();
+             num = num < 1 ? 1: num;
+             $("#num").val(num);
+             $("#total").text(num*price);
+         });
+         $("#buy").click(function () {
+              var num = $("#num").val();
+              var id = {{ good.id }}
+              url = "/Buyer/pay_order/?num="+num+"&id="+id;
+              window.location.href = url;
+         });
+    </script>
 {% endblock %}

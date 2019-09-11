@@ -55,7 +55,7 @@
                     <li>
                         <h4><a href="/Buyer/good_detail/{{ good.id }}/">{{ good.goods_name }}</a></h4>
                         <a href="/Buyer/good_detail/{{ good.id }}/"><img src="/static/{{ good.goods_picture }}"></a>
-                        <div class="prize">¥ {{ good.goods_price|floatformat:2 }}</div>
+                        <div class="prize">¥ {{ good.goods_price }}</div>
                     </li>
 
                 {% endfor %}

@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 from Seller.models import *
 from Seller.views import getPassword
-
+from alipay import AliPay
+from Qshop.settings import alipay_private_key_string,alipay_public_key_string
 # Create your views here.
 
 def loginValid(func):
@@ -37,6 +38,7 @@ def login(request):
 
                 response = HttpResponseRedirect("/Buyer/index/", locals())
                 response.set_cookie("user", user.email)
+                response.set_cookie("user_id", user.id)
                 response.set_cookie("username", user.username)
                 request.session["user"] = user.email
                 return response
@@ -69,6 +71,7 @@ def index(request):
 
 
 def logout(request):
+
     url = request.META.get("HTTP_REFERER","/Buyer/index/")
     response = HttpResponseRedirect(url)
     cookies = request.COOKIES.keys()
@@ -80,7 +83,25 @@ def logout(request):
 
 @loginValid
 def user_info(request):
+    email = request.COOKIES.get("user")
+    if email:
+        user = LoginUser.objects.filter(email=email).first()
     return render(request,"buyer/user_center_info.html",locals())
+
+@loginValid
+def user_site(request):
+    email = request.COOKIES.get("user")
+    if email:
+        user = LoginUser.objects.filter(email=email).first()
+    return  render(request,"buyer/user_center_site.html",locals())
+
+@loginValid
+def user_order(request):
+    email = request.COOKIES.get("user")
+    if email:
+        user = LoginUser.objects.filter(email=email).first()
+    return render(request, "buyer/user_center_order.html", locals())
+
 
 import math
 
@@ -133,3 +154,81 @@ def good_detail(request,id):
 
     good = Goods.objects.filter(id = int(id)).first()
     return render(request,"buyer/detail.html",locals())
+
+import time
+import datetime
+from Buyer.models import *
+
+@loginValid
+def pay_order(request):
+
+    num = request.GET.get("num")
+    id = request.GET.get("id")
+
+    if num and id:
+
+        num = int(num)
+        id = int(id)
+
+        order = PayOrder()
+        order.order_number = str(time.time()).replace(".","")
+        order.order_date = datetime.datetime.now()
+        order.order_status = 0
+        order.order_user = LoginUser.objects.get(id=int(request.COOKIES.get("user_id")))
+
+        order.save()
+
+        good = Goods.objects.get(id=id)
+
+
+        order_info = OrderInfo()
+        order_info.order_id = order
+        order_info.goods_id = good.id
+        order_info.goods_picture = good.goods_picture
+        order_info.goods_name = good.goods_name
+        order_info.goods_count = num
+        order_info.goods_price = good.goods_price
+        order_info.goods_total_price = good.goods_price * num
+        order_info.store_id = good.goods_store
+
+        order_info.save()
+        order.order_total = order_info.goods_total_price
+
+        order.save()
+
+    return render(request,"buyer/place_order.html",locals())
+
+def alipayOrder(request):
+    order_number = request.GET.get("order_number")
+    total = request.GET.get("total")
+    print(order_number)
+    print(total)
+    # 实例化支付
+
+    alipay = AliPay(
+        appid="2016101200667714",
+        app_notify_url=None,
+        app_private_key_string=alipay_private_key_string,
+        alipay_public_key_string=alipay_public_key_string,
+        sign_type="RSA2"
+    )
+
+    order_string = alipay.api_alipay_trade_page_pay(
+        out_trade_no=order_number,  # 订单编号
+        total_amount=str(total),  # 金额
+        subject="生鲜交易",
+        return_url="http://127.0.0.1:8000/Buyer/pay_result/",
+        notify_url="http://127.0.0.1:8000/Buyer/pay_result/",
+    )
+
+    result = "https://openapi.alipaydev.com/gateway.do?" + order_string
+
+    return HttpResponseRedirect(result)
+
+def pay_result(request):
+    out_trade_no = request.GET.get("out_trade_no")
+    if out_trade_no:
+        payorder = PayOrder.objects.get(order_number = out_trade_no)
+        payorder.order_status = 1
+        payorder.save()
+    return render(request,"buyer/pay_result.html",locals())
