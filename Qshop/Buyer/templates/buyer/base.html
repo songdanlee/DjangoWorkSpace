@@ -19,7 +19,7 @@
 				<div class="login_btn fl">
                     <span></span>
                     {% if  request.COOKIES.username %}
-                        欢迎您：<em>{{ request.COOKIES.username }}</em>
+                        欢迎您：<em id="user_cookie"></em>
                     {% else %}
 					<a href="/Buyer/login/">登录{{ request.COOKIE.username }}</a>
 					<span>|</span>
@@ -105,6 +105,17 @@
             window.location.href = "/Buyer/good_list/?type=bykey&keyword=" + keyword;
         }
 	</script>
+    <script>
+      function  getCookie (name){
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)){
+            return (arr[2]);
+        }
+        else  return null;
+    }
+    var username = decodeURI(getCookie ('username'));
+    $("#user_cookie").text(username);
+    </script>
     {% block script %}
     {% endblock %}
 </body>

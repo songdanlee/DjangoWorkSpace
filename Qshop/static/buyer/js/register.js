@@ -6,7 +6,6 @@ $(function(){
 	var error_email = false;
 	var error_check = false;
 
-
 	$('#user_name').blur(function() {
 		check_user_name();
 	});
@@ -55,9 +54,9 @@ $(function(){
 
 	function check_pwd(){
 		var len = $('#pwd').val().length;
-		if(len<8||len>20)
+		if(len<8)
 		{
-			$('#pwd').next().html('密码最少8位，最长20位')
+			$('#pwd').next().html('密码安全系数低，位数少于8位，不推荐使用')
 			$('#pwd').next().show();
 			error_password = true;
 		}
@@ -101,6 +100,7 @@ $(function(){
 			$('#email').next().show();
 			error_check_password = true;
 		}
+
 
 	}
 

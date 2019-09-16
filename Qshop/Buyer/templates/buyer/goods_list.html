@@ -41,7 +41,7 @@
 					<div class="operate">
 						<span class="prize">￥{{ good.goods_price }}</span>
 						<span class="unit">{{ good.goods_price }}/500g</span>
-						<a href="#" class="add_goods" title="加入购物车"></a>
+						<a href="#" id="{{ good.id }}" onclick="addCart(this,1)" class="add_goods" title="加入购物车"></a>
 					</div>
 				</li>
                 {% endfor %}
@@ -67,6 +67,32 @@
     {% else %}
         <p style="text-align: center;color: deepskyblue;font-size: 20px">对不起，没有找到你要的商品</p>
     {% endif %}
+{% endblock %}
+{% block script %}
+    <script>
+        function addCart(obj,count) {
+            var sendData = {
+                "goods_id":obj.id,
+                "count":count,
+                "csrfmiddlewaretoken":'{{ csrf_token }}'
+            };
+            console.log(sendData);
+            $.ajax(
+                {
+                    url:"/Buyer/add_cart/",
+                    type:"POST",
+                    data:sendData,
+                    success:function (data) {
+                        alert(data["data"])
+                    },
+                    error:function (errr) {
+                        alert(err["data"])
+                    }
+                }
+            )
+        }
+
+    </script>
 {% endblock %}
 
 

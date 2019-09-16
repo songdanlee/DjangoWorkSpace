@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+import json
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 from Seller.models import *
 from Seller.views import getPassword
 from alipay import AliPay
+from django.utils.http import urlquote
 from Qshop.settings import alipay_private_key_string,alipay_public_key_string
 # Create your views here.
 
@@ -28,6 +31,8 @@ def loginValid(func):
 
 def login(request):
     if request.method == "POST":
+        erremail = ""
+
         email = request.POST.get("email")
         pwd = request.POST.get("pwd")
         user = LoginUser.objects.filter(email=email).first()
@@ -39,25 +44,37 @@ def login(request):
                 response = HttpResponseRedirect("/Buyer/index/", locals())
                 response.set_cookie("user", user.email)
                 response.set_cookie("user_id", user.id)
-                response.set_cookie("username", user.username)
+                response.set_cookie("username", urlquote(user.username))
                 request.session["user"] = user.email
                 return response
-    return render(request, "buyer/login.html")
+            else:
+                errpwd = "密码不匹配"
+        else:
+            erremail = "该邮箱未注册"
+    return render(request, "buyer/login.html",locals())
 
 
 def register(request):
+    errmsg = ""
     if request.method == "POST":
         username = request.POST.get("user_name")
         pwd = request.POST.get("pwd")
         email = request.POST.get("email")
-
-        user = LoginUser()
-        user.username = username
-        user.password = getPassword(pwd)
-        user.email = email
-        user.save()
-        return HttpResponseRedirect("/Buyer/login/", locals())
-    return render(request, "buyer/register.html")
+        db_email = LoginUser.objects.filter(email=email).first()
+        db_username = LoginUser.objects.filter(username=username).first()
+        if not db_email:
+            if not db_username:
+                user = LoginUser()
+                user.username = username
+                user.password = getPassword(pwd)
+                user.email = email
+                user.save()
+                return HttpResponseRedirect("/Buyer/login/", locals())
+            else:
+                errmsg = "用户名已存在"
+        else:
+            errmsg = "邮箱已注册"
+    return render(request, "buyer/register.html",{"errmsg":errmsg})
 
 
 def index(request):
@@ -162,47 +179,91 @@ from Buyer.models import *
 @loginValid
 def pay_order(request):
 
-    num = request.GET.get("num")
-    id = request.GET.get("id")
+    if request.method == "GET":
+        num = request.GET.get("num")
+        id = request.GET.get("id")
 
-    if num and id:
+        if num and id:
 
-        num = int(num)
-        id = int(id)
+            num = int(num)
+            id = int(id)
 
-        order = PayOrder()
-        order.order_number = str(time.time()).replace(".","")
+            order = PayOrder() # 订单
+            order.order_number = str(time.time()).replace(".","")
+            order.order_date = datetime.datetime.now()
+            order.order_status = 0
+            order.order_user = LoginUser.objects.get(id=int(request.COOKIES.get("user_id")))
+
+            order.save()
+
+            good = Goods.objects.get(id=id)
+
+            order_info = OrderInfo() #订单详情
+            order_info.order_id = order
+            order_info.goods_id = good.id
+            order_info.goods_picture = good.goods_picture
+            order_info.goods_name = good.goods_name
+            order_info.goods_count = num
+            order_info.goods_price = good.goods_price
+            order_info.goods_total_price = good.goods_price * num
+            order_info.store_id = good.goods_store
+
+            order_info.save()
+            order.order_total = order_info.goods_total_price
+
+            order.save()
+    elif request.method == "POST":
+        """
+        请求
+        {"goods": [{"good_id": 110, "number": 10}, {"good_id": 109, "number": 10}, {"good_id": 111, "number": 10}]}
+        """
+        res = json.loads(request.body.decode("utf-8"))  # 获取post请求字典 如{'goods': [{'number': 14, 'good_id': 120}, {'number': 14, 'good_id': 121}]}
+        lis = res.get("goods") #对应的商品id和数量组成字典的列表
+
+        order = PayOrder()  # 创建订单
+        order.order_number = str(time.time()).replace(".", "")
         order.order_date = datetime.datetime.now()
         order.order_status = 0
-        order.order_user = LoginUser.objects.get(id=int(request.COOKIES.get("user_id")))
-
+        # order.order_user = LoginUser.objects.get(id=int(request.COOKIES.get("user_id")))
+        order.order_user = LoginUser.objects.get(id=1)
+        order.order_total = 0.0
+        order.goods_number = 0
         order.save()
 
-        good = Goods.objects.get(id=id)
+        for dic in lis: # 拿到每个字典 {'number': 14, 'good_id': 120}
+                num = dic.get("number",0)
+                id = dic.get("good_id",0)
+                if num and id:
+                    num = int(num)
+                    id = int(id)
 
+                    good = Goods.objects.get(id=id)
+                    order_info = OrderInfo()  # 订单详情
+                    order_info.order_id = order
+                    order_info.goods_id = good.id
+                    order_info.goods_picture = good.goods_picture
+                    order_info.goods_name = good.goods_name
+                    order_info.goods_count = num
+                    order_info.goods_price = good.goods_price
+                    order_info.goods_total_price = good.goods_price * num
+                    order_info.store_id = good.goods_store
 
-        order_info = OrderInfo()
-        order_info.order_id = order
-        order_info.goods_id = good.id
-        order_info.goods_picture = good.goods_picture
-        order_info.goods_name = good.goods_name
-        order_info.goods_count = num
-        order_info.goods_price = good.goods_price
-        order_info.goods_total_price = good.goods_price * num
-        order_info.store_id = good.goods_store
+                    order_info.save()
 
-        order_info.save()
-        order.order_total = order_info.goods_total_price
+                    order.order_total += order_info.goods_total_price # 订单总价
+                    order.goods_number += 1 # 商品种类个数
 
-        order.save()
+                    order.save()
+
 
     return render(request,"buyer/place_order.html",locals())
 
+@loginValid
 def alipayOrder(request):
+
     order_number = request.GET.get("order_number")
     total = request.GET.get("total")
-    print(order_number)
-    print(total)
+
     # 实例化支付
 
     alipay = AliPay(
@@ -217,18 +278,49 @@ def alipayOrder(request):
         out_trade_no=order_number,  # 订单编号
         total_amount=str(total),  # 金额
         subject="生鲜交易",
-        return_url="http://127.0.0.1:8000/Buyer/pay_result/",
+        return_url="http://127.0.0.1:8000/Buyer/pay_result/", # 支付跳转页面
         notify_url="http://127.0.0.1:8000/Buyer/pay_result/",
     )
 
     result = "https://openapi.alipaydev.com/gateway.do?" + order_string
 
     return HttpResponseRedirect(result)
-
+@loginValid
 def pay_result(request):
     out_trade_no = request.GET.get("out_trade_no")
     if out_trade_no:
         payorder = PayOrder.objects.get(order_number = out_trade_no)
-        payorder.order_status = 1
+        payorder.order_status = 1 # 订单支付，改变状态
         payorder.save()
     return render(request,"buyer/pay_result.html",locals())
+
+
+@loginValid
+def add_cart(request):
+    sendData = {
+        "code":200,
+        "data":""
+    }
+    if request.method == "POST":
+        id = int(request.POST.get("goods_id"))
+        count = int(request.POST.get("count",1))
+
+        goods = Goods.objects.get(id=id)
+        cart = Cart()
+        cart.goods_name = goods.goods_name
+        cart.goods_num = count
+        cart.goods_price = goods.goods_price
+        cart.goods_picture = goods.goods_picture
+        cart.goods_total = goods.goods_price * count
+        cart.goods_id = goods.id
+        cart.cart_user = request.COOKIES.get("user_id")
+        cart.save()
+        sendData['data'] = "加入购物车成功"
+    else:
+        sendData["code"] = 500
+        sendData["data"] = "请求方式错误"
+    return JsonResponse(sendData)
+
+@loginValid
+def mycart(request):
+    pass

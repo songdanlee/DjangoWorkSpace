@@ -27,7 +27,7 @@
                 <div class="total">总价：<em id="total">{{ good.goods_price }}</em><em>元</em></div>
                 <div class="operate_btn">
                     <a id="buy" href="javascript:;" class="buy_btn">立即购买</a>
-                    <a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
+                    <a href="javascript:;" id="{{ good.id }}" onclick="addCart(this)" class="add_cart" id="add_cart">加入购物车</a>
                 </div>
             </div>
         </div>
@@ -100,5 +100,30 @@
               url = "/Buyer/pay_order/?num="+num+"&id="+id;
               window.location.href = url;
          });
+         function addCart(obj) {
+             var goods_id = obj.id;
+             var num = $("#num").val();
+             var csfr_token = '{{ csrf_token }}'
+             var sendData = {
+                "goods_id":goods_id,
+                "count":num,
+                "csrfmiddlewaretoken":csfr_token,
+            };
+            // console.log(sendData)
+             $.ajax(
+                 {
+                    url:"/Buyer/add_cart/",
+                    type:"POST",
+                    data:sendData,
+                    success:function (data) {
+                        alert(data["data"])
+                    } ,
+                    error:function (err) {
+                        alert(err["data"])
+                    }
+                 }
+             );
+         }
+
     </script>
 {% endblock %}
