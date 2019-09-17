@@ -100,23 +100,26 @@ def logout(request):
 
 @loginValid
 def user_info(request):
-    email = request.COOKIES.get("user")
-    if email:
-        user = LoginUser.objects.filter(email=email).first()
+    id = request.COOKIES.get("user_id")
+    if id:
+        user = LoginUser.objects.filter(id=id).first()
     return render(request,"buyer/user_center_info.html",locals())
 
 @loginValid
 def user_site(request):
-    email = request.COOKIES.get("user")
-    if email:
-        user = LoginUser.objects.filter(email=email).first()
+    id = request.COOKIES.get("user_id")
+    if id:
+        user = LoginUser.objects.filter(id=id).first()
     return  render(request,"buyer/user_center_site.html",locals())
 
 @loginValid
 def user_order(request):
-    email = request.COOKIES.get("user")
-    if email:
-        user = LoginUser.objects.filter(email=email).first()
+    id = request.COOKIES.get("user_id")
+    if id:
+        user = LoginUser.objects.filter(id=id).first()
+        order_lists = PayOrder.objects.filter(order_user=user).order_by("-order_date")
+
+
     return render(request, "buyer/user_center_order.html", locals())
 
 
@@ -207,36 +210,32 @@ def pay_order(request):
             order_info.goods_price = good.goods_price
             order_info.goods_total_price = good.goods_price * num
             order_info.store_id = good.goods_store
-
             order_info.save()
             order.order_total = order_info.goods_total_price
 
             order.save()
     elif request.method == "POST":
-        """
-        请求
-        {"goods": [{"good_id": 110, "number": 10}, {"good_id": 109, "number": 10}, {"good_id": 111, "number": 10}]}
-        """
-        res = json.loads(request.body.decode("utf-8"))  # 获取post请求字典 如{'goods': [{'number': 14, 'good_id': 120}, {'number': 14, 'good_id': 121}]}
-        lis = res.get("goods") #对应的商品id和数量组成字典的列表
+        request_data = []
+        data = request.POST
+        data_item = request.POST.items()
+        for key, value in data_item:
+            if key.startswith("check_"):
+                id = int(key.split("_", 1)[1])
+                num = int(data.get("count_"+str(id)))
+                request_data.append((id,num))
+        if request_data:
+            order = PayOrder()  # 创建订单
+            order.order_number = str(time.time()).replace(".", "")
+            order.order_date = datetime.datetime.now()
+            order.order_status = 0
+            order.order_user = LoginUser.objects.get(id=int(request.COOKIES.get("user_id")))
 
-        order = PayOrder()  # 创建订单
-        order.order_number = str(time.time()).replace(".", "")
-        order.order_date = datetime.datetime.now()
-        order.order_status = 0
-        # order.order_user = LoginUser.objects.get(id=int(request.COOKIES.get("user_id")))
-        order.order_user = LoginUser.objects.get(id=1)
-        order.order_total = 0.0
-        order.goods_number = 0
-        order.save()
+            order.order_total = 0.0
+            order.goods_number = 0
+            order.save()
 
-        for dic in lis: # 拿到每个字典 {'number': 14, 'good_id': 120}
-                num = dic.get("number",0)
-                id = dic.get("good_id",0)
-                if num and id:
-                    num = int(num)
-                    id = int(id)
 
+            for id, num in request_data:
                     good = Goods.objects.get(id=id)
                     order_info = OrderInfo()  # 订单详情
                     order_info.order_id = order
@@ -250,10 +249,11 @@ def pay_order(request):
 
                     order_info.save()
 
-                    order.order_total += order_info.goods_total_price # 订单总价
-                    order.goods_number += 1 # 商品种类个数
+                    order.order_total += order_info.goods_total_price  # 订单总价
+                    order.goods_number += 1  # 商品种类个数
 
-                    order.save()
+            order.save()
+
 
 
     return render(request,"buyer/place_order.html",locals())
@@ -323,4 +323,7 @@ def add_cart(request):
 
 @loginValid
 def mycart(request):
-    pass
+    id = request.COOKIES.get("user_id")
+    carts = Cart.objects.filter(cart_user=id).order_by("-id")
+    number = carts.count()
+    return render(request,"buyer/cart.html",locals())
