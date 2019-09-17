@@ -29,16 +29,34 @@ def register(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
+        code = request.POST.get("valid_code")
         if email:  # 邮箱不为空
             user = LoginUser.objects.filter(email=email).first()  # 查找邮箱是否注册
             if not user:  # 未注册
                 if password:  # 密码不为空
-                    loginuser = LoginUser()
-                    loginuser.username = email
-                    loginuser.email = email
-                    loginuser.password = getPassword(password)  # 加密数据
-                    loginuser.save()  # 保存到数据库
-                    successmsg = "恭喜你注册成功"
+                    # 查询数据库用户当前最新的验证码
+                    codes = Valid_Code.objects.filter(code_user=email).order_by("-code_time").first()
+                    # 获取当前时间
+                    now = time.mktime(datetime.datetime.now().timetuple())
+                    # 获取验证码的存储时间
+                    db_time = time.mktime(codes.code_time.timetuple())
+                    # 时间差，换算为分钟
+                    t = (now - db_time) / 60
+                    """
+                        验证码存在
+                        验证码未过期
+                        验证码未使用
+                        输入验证码和数据库验证码一致（不区分大小写）    
+                    """
+                    if codes and t <= 5 and codes.code_state == 0 and code.upper() == codes.code_content.upper():
+                        loginuser = LoginUser()
+                        loginuser.username = email
+                        loginuser.email = email
+                        loginuser.password = getPassword(password)  # 加密数据
+                        loginuser.save()  # 保存到数据库
+                        successmsg = "恭喜你注册成功"
+                    else:
+                        errormsg = "验证码输入不正确"
                 else:
                     errormsg = "密码为空"
             else:
@@ -68,6 +86,8 @@ def loginValid(func):
 
     return inner
 
+import datetime
+import time
 
 def login(request):
     """
@@ -79,6 +99,7 @@ def login(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
+        code = request.POST.get("valid_code")
         if email:  # 邮箱不为空
             user = LoginUser.objects.filter(email=email).first()
             if user:  # 数据库可以查找到用户
@@ -86,11 +107,33 @@ def login(request):
                     db_password = user.password  # 数据库中用户的密码
                     password = getPassword(password)  # 输入密码加密
                     if password == db_password:  # 密码正确,登录成功
-                        response = HttpResponseRedirect("/Seller/index/")
-                        response.set_cookie("username", user.username)  # 添加cookie
-                        response.set_cookie("id", user.id)
-                        request.session['session_username'] = user.username  # 添加session
-                        return response  # 跳转到index首页
+                        # 查询数据库用户当前最新的验证码
+                        codes = Valid_Code.objects.filter(code_user=email).order_by("-code_time").first()
+                        # 获取当前时间
+                        now = time.mktime(datetime.datetime.now().timetuple())
+                        # 获取验证码的存储时间
+                        db_time = time.mktime(codes.code_time.timetuple())
+                        # 时间差，换算为分钟
+                        t = (now - db_time) / 60
+                        """
+                            验证码存在
+                            验证码未过期
+                            验证码未使用
+                            输入验证码和数据库验证码一致（不区分大小写）    
+                        """
+                        if codes and t <= 5 and codes.code_state==0 and code.upper() == codes.code_content.upper():
+                            response = HttpResponseRedirect("/Seller/index/")
+                            response.set_cookie("username", user.username)  # 添加cookie
+                            response.set_cookie("id", user.id)
+                            request.session['session_username'] = user.username  # 添加session
+                            codes.code_state = 1 # 设置验证码已使用
+                            codes.save()
+                            return response  # 跳转到index首页
+                        else:
+                            if codes and t <= 5: # 过期
+                                codes.code_state = 1 # 设置验证码已使用
+                                codes.save()
+                            errormsg = "验证码不正确"
                     else:
                         errormsg = "密码不正确"
                 else:
@@ -225,3 +268,54 @@ def goods_add(request):
 
     types = GoodsType.objects.all()
     return render(request, "seller/goods_add.html", locals())
+
+
+from Seller.myutils import *
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def send_login_code(request):
+    result = {
+        "code":200,
+        "data":""
+    }
+    if request.method == "POST":
+        email = request.POST.get("email")
+        code = random_code()
+        c = Valid_Code()
+        c.code_user = email
+        c.code_content = code
+        c.save()
+        send_data = "%s的验证码为%s,打死也不要告诉别人哟"%(email,code)
+        sendDing(send_data) # 发送验证
+        result["data"] = "发送成功"
+    else:
+        result["code"] = 400
+        result["data"] = "请求姿势不太对哟"
+    return JsonResponse(result)
+
+@csrf_exempt
+def send_eamil_code(request):
+    result = {
+        "code": 200,
+        "data": ""
+    }
+    if request.method == "POST":
+        email = request.POST.get("email")
+        code = random_code()
+        c = Valid_Code()
+        c.code_user = email
+        c.code_content = code
+        c.save()
+        send_data = "%s的验证码为%s,打死也不要告诉别人哟" % (email, code)
+
+
+        mailsend = MailSender(sender="15037609692@163.com",recever=email,password="l123456",content=send_data,subject="验证码")
+        mailsend.send()
+
+        result["data"] = "发送成功"
+    else:
+        result["code"] = 400
+        result["data"] = "请求姿势不太对哟"
+    return JsonResponse(result)
