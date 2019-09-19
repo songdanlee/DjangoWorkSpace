@@ -15,6 +15,9 @@ urlpatterns = [
     path('goods_add/', goods_add),
     path('slc/', send_login_code),
     path('send_eamil_code/', send_eamil_code),
+    path('get_task/', get_task),
+    path('mtv/', middle_test_view),
+
     # path('goods_update/', goods_update),
 ]
 

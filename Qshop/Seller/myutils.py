@@ -45,11 +45,11 @@ def sendDing(content,to="15037609692"):
 import smtplib
 from email.mime.text import MIMEText
 
+
 class MailSender():
 
     def __init__(self,sender,recever,content,password,subject="",server="smtp.163.com",port=994):
         """
-
         :param sender: 发送方邮箱
         :param recever: 接收方邮箱 ,字符串存储 ','分割
         :param content: 发送正文

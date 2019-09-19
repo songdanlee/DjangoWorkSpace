@@ -270,9 +270,10 @@ def goods_add(request):
     return render(request, "seller/goods_add.html", locals())
 
 
-from Seller.myutils import *
+from Seller.myutils import MailSender,random_code,sendDing as sd
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from CeleryTask.tasks import sendDing
 
 @csrf_exempt
 def send_login_code(request):
@@ -288,7 +289,9 @@ def send_login_code(request):
         c.code_content = code
         c.save()
         send_data = "%s的验证码为%s,打死也不要告诉别人哟"%(email,code)
-        sendDing(send_data) # 发送验证
+        #sd(send_data) # 发送验证
+        # 使用celery异步任务
+        sendDing.delay(send_data)
         result["data"] = "发送成功"
     else:
         result["code"] = 400
@@ -310,7 +313,6 @@ def send_eamil_code(request):
         c.save()
         send_data = "%s的验证码为%s,打死也不要告诉别人哟" % (email, code)
 
-
         mailsend = MailSender(sender="15037609692@163.com",recever=email,password="l123456",content=send_data,subject="验证码")
         mailsend.send()
 
@@ -319,3 +321,26 @@ def send_eamil_code(request):
         result["code"] = 400
         result["data"] = "请求姿势不太对哟"
     return JsonResponse(result)
+
+
+from CeleryTask.tasks import add
+
+
+def get_task(request):
+    num1 = request.GET.get("num1",1)
+    num2 = request.GET.get("num2",2)
+    add.delay(int(num1),int(num2))
+
+    return JsonResponse({"data":"success"})
+
+
+# def middle_test_view(request):
+#     print("我是view")
+#     return JsonResponse({"data":"hello"})
+
+def middle_test_view(request):
+    def hello():
+       return HttpResponse("hello world")
+    rep = HttpResponse("nihao")
+    rep.render = hello
+    return rep
