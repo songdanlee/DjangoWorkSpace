@@ -73,11 +73,11 @@ class middleware2(MiddlewareMixin):
         print("process_views2")
         print(callback)
 
-    def process_exception(self,request,exception):
-
-        if exception:
-            print("%s"%exception)
-            return HttpResponse("%s"%exception)
+    # def process_exception(self,request,exception):
+    #
+    #     if exception:
+    #         print("%s"%exception)
+    #         return HttpResponse("%s"%exception)
     def process_response(self,request,response):
         print("process_response2")
         return response

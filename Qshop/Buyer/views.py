@@ -194,7 +194,6 @@ def pay_order(request):
             order = PayOrder() # 订单
             order.order_number = str(time.time()).replace(".","")
             order.order_date = datetime.datetime.now()
-            order.order_status = 0
             order.order_user = LoginUser.objects.get(id=int(request.COOKIES.get("user_id")))
 
             order.save()
@@ -210,6 +209,9 @@ def pay_order(request):
             order_info.goods_price = good.goods_price
             order_info.goods_total_price = good.goods_price * num
             order_info.store_id = good.goods_store
+
+            order_info.order_status = 0 # 状态
+
             order_info.save()
             order.order_total = order_info.goods_total_price
 
@@ -227,7 +229,7 @@ def pay_order(request):
             order = PayOrder()  # 创建订单
             order.order_number = str(time.time()).replace(".", "")
             order.order_date = datetime.datetime.now()
-            order.order_status = 0
+
             order.order_user = LoginUser.objects.get(id=int(request.COOKIES.get("user_id")))
 
             order.order_total = 0.0
@@ -246,6 +248,8 @@ def pay_order(request):
                     order_info.goods_price = good.goods_price
                     order_info.goods_total_price = good.goods_price * num
                     order_info.store_id = good.goods_store
+
+                    order_info.order_status = 0
 
                     order_info.save()
 
@@ -285,13 +289,16 @@ def alipayOrder(request):
     result = "https://openapi.alipaydev.com/gateway.do?" + order_string
 
     return HttpResponseRedirect(result)
+
 @loginValid
 def pay_result(request):
     out_trade_no = request.GET.get("out_trade_no")
     if out_trade_no:
+
         payorder = PayOrder.objects.get(order_number = out_trade_no)
-        payorder.order_status = 1 # 订单支付，改变状态
-        payorder.save()
+        payorder.orderinfo_set.all().update(order_status = 1)
+
+
     return render(request,"buyer/pay_result.html",locals())
 
 

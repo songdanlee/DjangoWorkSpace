@@ -32,7 +32,7 @@
 					<span>|</span>
 					<a href="/Buyer/mycart/">我的购物车</a>
 					<span>|</span>
-					<a href="user_center_order.html">我的订单</a>
+					<a href="/Buyer/user_order/">我的订单</a>
                      {% if  request.COOKIES.username %}
                       <span>|</span>
 					        <a href="/Buyer/logout/">退出登录</a>
@@ -101,7 +101,7 @@
 		}
 		function search() {
             var keyword = $("#keyword").val();
-            window.location.href = "/Buyer/good_list/?type=bykey&keyword=" + keyword;
+            window.location.href = "/Buyer/good_list/1/?type=bykey&keyword=" + keyword;
         }
 	</script>
     {% block script %}

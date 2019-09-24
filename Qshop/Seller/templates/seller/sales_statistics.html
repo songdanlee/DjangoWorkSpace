@@ -1,0 +1,67 @@
+{%  extends 'seller/base.html' %}
+{% block title %}
+    销售分析
+{% endblock %}
+
+{% block content %}
+
+        <h3>总收入：{{ total_income }}</h3>
+        <h3>总支出：{{ total_pay }}</h3>
+        <h3>总利润：{{ total_rece }}</h3>
+        <!--
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th>订单号</th>
+                        <th>商品名称</th>
+                        <th>商品销量</th>
+                        <th>商品购买者</th>
+                        <th>商品总价格</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                  {% for order  in order_lists %}
+                    <tr>
+                        <td>{{ order.order_id.order_number }}</td>
+                        <td>{{ order.goods_name }}</td>
+                      <td>{{ order.goods_count }}</td>
+                      <td>{{ order.order_id.order_user.username}}</td>
+                      <td>{{ order.goods_total_price }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+        -->
+        <!--商品销量
+        {92: ['封丘蒿菜', 8, 412.72], 103: ['大闸蟹', 2, 400.0]}
+        -->
+    {{  salary_volume }}
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th>商品id</th>
+                        <th>商品名称</th>
+                        <th>商品销量</th>
+                        <th>商品总额</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                  {% for k,v  in salary_volume.items %}
+                    <tr>
+                     <td>{{ k }}</td>
+                      <td>{{ v.0 }}</td>
+                      <td>{{ v.1 }}</td>
+                      <td>{{ v.2 }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+
+
+
+
+
+
+{% endblock %}

@@ -88,7 +88,9 @@ def loginValid(func):
 
 import datetime
 import time
+from django.views.decorators.cache import cache_page
 
+@cache_page(60*5) # 使用缓存，时间5分钟
 def login(request):
     """
        :param request:
@@ -158,7 +160,7 @@ def index(request):
 
 
 from django.core.paginator import Paginator
-
+from  Seller.models import Goods
 
 @loginValid
 def goods_list(request, status="up", page=1):
@@ -344,3 +346,87 @@ def middle_test_view(request):
     rep = HttpResponse("nihao")
     rep.render = hello
     return rep
+
+from Buyer.models import OrderInfo,PayOrder
+
+def order_list(request,status):
+
+    """
+    0 未支付
+    1 已支 付
+    2 待收货
+    3/4 完成/拒收
+    """
+    status = int(status)
+    user_id = request.COOKIES.get("id")
+    p = int(request.GET.get("page"))
+
+    store = LoginUser.objects.get(id=user_id)
+    order_lists = store.orderinfo_set.filter(order_status = status).order_by("-id")
+
+    page_lists = Paginator(order_lists,5)
+    order_lists = page_lists.page(p)
+    pages = page_lists.page_range
+
+    return render(request,"seller/order_list.html",locals())
+
+
+def change_order(request):
+    # 通过订单id详情锁定订单详情
+    status = int(request.GET.get("order_status"))
+    order_id = int(request.GET.get("order_id"))
+
+    order = OrderInfo.objects.get(id=order_id)
+    order.order_status = status
+    order.save()
+    url = request.META.get("HTTP_REFERER","/Seller/order_list/%s/?page=1"%status)
+    response = HttpResponseRedirect(url)
+    return response
+from Seller.myutils import datetime_now
+from django.db.models import Sum,Count,Max,Min,Count,Q
+
+def sales_sta(request):
+    """
+        月收入
+        月支出
+        月纯利润
+        商品销售情况
+        当月店铺所有商品的销售量
+    """
+    month = datetime.datetime.now().month
+
+    user_id = request.COOKIES.get("id")
+    # 查询店铺
+    store = LoginUser.objects.get(id=user_id)
+
+    # 查询当前店铺当月订单,状态大于1
+    order_lists = store.orderinfo_set.filter(order_status__gte=1,order_id__order_date__month=month)
+
+    # 月收入
+    total_set = order_lists.aggregate(total_income=Sum("goods_total_price"))
+    total_income = total_set.get("total_income")
+
+    #月支出
+    total_pay = total_income*0.4
+    # 月纯利润
+    total_rece = total_income - total_pay
+    #商品销售情况
+
+    salary_volumes = order_lists.values("goods_id").annotate(count=Sum("goods_count"),total=Sum("goods_total_price")).values("goods_id", "goods_name", "count",
+                                                                             "total","goods_count").order_by("-count")
+    salary_volume = {}
+    #{商品id:(商品名,该月销量，总价)}
+    for i in salary_volumes:
+        if i.get("goods_id") in list(salary_volume.keys()):
+            salary_volume[i.get("goods_id")][1] += i.get("count")
+            salary_volume[i.get("goods_id")][2] += i.get("total")
+        else:
+            salary_volume[i.get("goods_id")]= [i.get("goods_name"),i.get("count"),i.get("total")]
+
+    # 销量最高前三，购买者次数最多前三，每单单价最高
+
+
+
+
+
+    return render(request,"seller/sales_statistics.html",locals())

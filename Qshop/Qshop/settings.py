@@ -50,8 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "Qshop.middleware.MiddleWareTest",
-    "Qshop.middleware.middleware2",
+    #"Qshop.middleware.MiddleWareTest",
+    #"Qshop.middleware.middleware2",
 ]
 
 ROOT_URLCONF = 'Qshop.urls'
@@ -130,6 +130,36 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR,"static"),)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,"static")
 
+
+
+# The cache backends to use.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+            "127.0.0.1:11211" # 本地memcache 地址端口
+        ]
+    }
+}
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
+CACHE_MIDDLEWARE_SECONDS = 600
+CACHE_MIDDLEWARE_ALIAS = 'default'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 alipay_public_key_string = """-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnIIYur27kzgkV51p14bNhr/lN8eDUIIOc1+189LCo8rLNb9WYC8q+RypvFFf1uiK8ujeu+1ynLR0OBGwBgx1vzsWyfsg97XeHobfwbrPUmUI9jbYFsk6UD+7eZl7TfAL/ERmpCkJWliKIEcSWWAcD4uxDT/baZ+6hoRja4nH4tBCBzBPWYh4Qut9E0t7jMKCCd46SU7M4WNcOInlRTzu6mfF8LqRhXyGMt2oIj916W9B1eiFHiJ+61/rEghm0Li4kv4vNnac52IE04TXy+8CtksWJ47DFTOcYH2u8wFOBSU3GY2wKzI7yogIzwHgLqK5GT7wkHAQckpn70qazjr2tQIDAQAB
 -----END PUBLIC KEY-----"""
@@ -141,7 +171,7 @@ MIIEpAIBAAKCAQEAnIIYur27kzgkV51p14bNhr/lN8eDUIIOc1+189LCo8rLNb9WYC8q+RypvFFf1uiK
 ERROR_PATH = os.path.join(BASE_DIR,"error.log")
 
 # 钉钉助手
-DING_URL = """https://oapi.dingtalk.com/robot/send?access_token=90b5894a1615f70278806be3dd9ce6cd7e959bc1093df9a3b2845e22ede24279"""
+DING_URL = """https://oapi.dingtalk.com/robot/send?access_token=a83286c4644275f5f2c3095144b7453819a322b3583d0a119f599fc0ac62ef48"""
 # celery 配置
 import djcelery
 
@@ -163,3 +193,5 @@ CELERYBEAT_SCHEDULE = {
         "schedule":timedelta(seconds=10)
     }
 }
+
+

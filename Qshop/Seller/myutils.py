@@ -85,8 +85,21 @@ class MailSender():
             if smtp:
                 smtp.close()
 
+import datetime
 
+# 返回当月的datetime对象
+def datetime_now():
+    # now = datetime.datetime.now()
+    now = datetime.datetime(2019,12,1)
+
+    start = datetime.datetime(now.year,now.month,1)
+    if now.month == 12:
+        end = datetime.datetime(now.year+1,1,1)
+    else:
+        end = datetime.datetime(now.year,now.month+1,1)
+
+    return start,end
 
 
 if __name__ == '__main__':
-    print(random_code())
+    datetime_now()

@@ -16,60 +16,51 @@ class = "active"
 					<li class="col01">{{ order.order_date }}</li>
 					<li class="col02">订单号：{{ order.order_number }}</li>
 					<li class="col02 stress">
-                        {% if order.order_status == 0 %}
-                            未支付
-                            {% elif order.order_status == 1 %}
-                            已支付
-                            {% elif order.order_status == 2 %}
-                            待发货
-                            {% elif order.order_status == 3 %}
-                            待收货
-                            {% elif order.order_status == 4 %}
-                            完成
-                            {% elif order.order_status == 5 %}
-                            拒收
 
-                        {% endif %}
                     </li>
 				</ul>
 
 				<table class="order_list_table w980">
 					<tbody>
-						<tr>
-							<td width="55%">
-                                {% for g in order.orderinfo_set.all %}
-								<ul class="order_goods_list clearfix">					
-									<li class="col01"><img src="/static/{{ g.goods_picture }}"></li>
-									<li class="col02">{{ g.goods_name }}<em>{{ g.goods_price }}元/500g</em></li>
-									<li class="col03">{{ g.goods_count }}</li>
-									<li class="col04">{{ g.goods_total_price }}元</li>
-								</ul>
-                                {% endfor %}
-							</td>
-							<td width="15%">{{ order.order_total }}元</td>
-							<td width="15%">
-                                {% if order.order_status == 0 %}
-                            未支付
-                            {% elif order.order_status == 1 %}
-                            已支付
-                            {% elif order.order_status == 2 %}
-                            待发货
-                            {% elif order.order_status == 3 %}
-                            待收货
-                            {% elif order.order_status == 4 %}
-                            完成
-                            {% elif order.order_status == 5 %}
-                            拒收
+						  {% for g in order.orderinfo_set.all %}
+                                  <tr>
 
-                        {% endif %}
-                            </td>
+                                    <td width="55%">
 
-                                {%if order.order_status == 0 %}
-							    <td width="15%"><a href="/Buyer/alipayOrder?order_number={{ order.order_number }}&total={{ order.order_total }}" class="oper_btn">去付款</a></td>
-                                {% else %}
-                    			<td width="15%"></td>
-                                {% endif %}
-						</tr>
+                                        <ul class="order_goods_list clearfix">
+                                            <li class="col01"><img src="/static/{{ g.goods_picture }}"></li>
+                                            <li class="col02">{{ g.goods_name }}<em>{{ g.goods_price }}元/500g</em></li>
+                                            <li class="col03">{{ g.goods_count }}</li>
+                                            <li class="col03">
+                                                    {% if g.order_status == 0 %}
+                                                    未支付
+                                                    {% elif g.order_status == 1 %}
+                                                    已支付
+                                                    {% elif g.order_status == 2 %}
+                                                    待收货
+                                                    {% elif g.order_status == 3 %}
+                                                    订单完成
+                                                    {% elif g.order_status == 4 %}
+                                                    拒收订单
+                                                {% endif %}
+                                            </li>
+                                            <li class="col04">{{ g.goods_total_price }}元</li>
+                                        </ul>
+
+                                    </td>
+                                    <td width="15%">总价:{{ order.order_total }}元</td>
+                                    <td width="15%">
+
+                                    </td>
+
+                                        {%if g.order_status == 0 %}
+                                        <td width="15%"><a href="/Buyer/alipayOrder?order_number={{ order.order_number }}&total={{ g.goods_total_price }}" class="oper_btn">去付款</a></td>
+                                        {% else %}
+                                        <td width="15%"></td>
+                                        {% endif %}
+
+                                </tr>
+                          {% endfor %}
 					</tbody>
 				</table>
 				{% endfor %}
@@ -77,7 +68,7 @@ class = "active"
 
 
 				<div class="pagenation">
-					<a href="#"><上一页</a>
+					<a href="#">上一页</a>
 					<a href="#" class="active">1</a>
 					<a href="#">2</a>
 					<a href="#">3</a>

@@ -1,10 +1,11 @@
 from django.urls import path,re_path,include
 from Seller.views import *
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
 
-    path('register/', register),
+    path('register/', cache_page(60*5)(register)),
     path('index/', index),
     path('login/', login),
     path('logout/', logout),
@@ -17,6 +18,14 @@ urlpatterns = [
     path('send_eamil_code/', send_eamil_code),
     path('get_task/', get_task),
     path('mtv/', middle_test_view),
+
+    # 订单
+    re_path(r"order_list/(?P<status>\d{1})",order_list),
+    path("change_order/",change_order),# 改变订单状态
+
+    #销售统计
+    path("sales_sta/",sales_sta)
+
 
     # path('goods_update/', goods_update),
 ]
