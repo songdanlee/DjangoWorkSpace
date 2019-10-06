@@ -121,7 +121,7 @@ def login(request):
                             验证码存在
                             验证码未过期
                             验证码未使用
-                            输入验证码和数据库验证码一致（不区分大小写）    
+                            输入验证码和数据库验证码一致（不区分大小写）
                         """
                         if codes and t <= 5 and codes.code_state==0 and code.upper() == codes.code_content.upper():
                             response = HttpResponseRedirect("/Seller/index/")
@@ -146,6 +146,8 @@ def login(request):
             errormsg = "邮箱为空"
 
     return render(request, "seller/login.html", locals())
+
+
 
 
 @loginValid

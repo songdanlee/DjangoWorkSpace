@@ -76,7 +76,9 @@
             var num = parseInt($("#num").val());
             $("#num").val(++num);
            // console.log(num*price);
-            $("#total").text(num*price);
+
+
+            $("#total").text(Math.round(num*price*100)/100);
         });
          $("#sub").click(function () {
             var price = parseFloat($("#price").text());
@@ -85,14 +87,14 @@
             num = num<=1?1:num;
             $("#num").val(num);
            // console.log(num*price);
-            $("#total").text(num*price);
+            $("#total").text(Math.round(num*price*100)/100);
         });
          $("#num").mouseout(function () {
              var price = parseFloat($("#price").text());
              var num = $("#num").val();
              num = num < 1 ? 1: num;
              $("#num").val(num);
-             $("#total").text(num*price);
+             $("#total").text(Math.round(num*price*100)/100);
          });
          $("#buy").click(function () {
               var num = $("#num").val();

@@ -20,6 +20,7 @@ urlpatterns = [
     re_path('good_detail/(?P<id>\d+)/', good_detail),
     re_path('pay_order/', csrf_exempt(pay_order)), # 订单页
     re_path('add_cart/',add_cart), # 购物车
+    path('delgood/',delgood), # 购物车
 
 
     path('mycart/',mycart)

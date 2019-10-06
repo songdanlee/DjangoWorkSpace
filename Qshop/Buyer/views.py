@@ -7,7 +7,9 @@ from Seller.models import *
 from Seller.views import getPassword
 from alipay import AliPay
 from django.utils.http import urlquote
-from Qshop.settings import alipay_private_key_string,alipay_public_key_string
+from Qshop.settings import alipay_private_key_string, alipay_public_key_string
+
+
 # Create your views here.
 
 def loginValid(func):
@@ -51,7 +53,7 @@ def login(request):
                 errpwd = "密码不匹配"
         else:
             erremail = "该邮箱未注册"
-    return render(request, "buyer/login.html",locals())
+    return render(request, "buyer/login.html", locals())
 
 
 def register(request):
@@ -74,7 +76,7 @@ def register(request):
                 errmsg = "用户名已存在"
         else:
             errmsg = "邮箱已注册"
-    return render(request, "buyer/register.html",{"errmsg":errmsg})
+    return render(request, "buyer/register.html", {"errmsg": errmsg})
 
 
 def index(request):
@@ -88,8 +90,7 @@ def index(request):
 
 
 def logout(request):
-
-    url = request.META.get("HTTP_REFERER","/Buyer/index/")
+    url = request.META.get("HTTP_REFERER", "/Buyer/index/")
     response = HttpResponseRedirect(url)
     cookies = request.COOKIES.keys()
     for cookie in cookies:
@@ -98,19 +99,22 @@ def logout(request):
         del request.session['user']
     return response
 
+
 @loginValid
 def user_info(request):
     id = request.COOKIES.get("user_id")
     if id:
         user = LoginUser.objects.filter(id=id).first()
-    return render(request,"buyer/user_center_info.html",locals())
+    return render(request, "buyer/user_center_info.html", locals())
+
 
 @loginValid
 def user_site(request):
     id = request.COOKIES.get("user_id")
     if id:
         user = LoginUser.objects.filter(id=id).first()
-    return  render(request,"buyer/user_center_site.html",locals())
+    return render(request, "buyer/user_center_site.html", locals())
+
 
 @loginValid
 def user_order(request):
@@ -118,7 +122,6 @@ def user_order(request):
     if id:
         user = LoginUser.objects.filter(id=id).first()
         order_lists = PayOrder.objects.filter(order_user=user).order_by("-order_date")
-
 
     return render(request, "buyer/user_center_order.html", locals())
 
@@ -144,16 +147,18 @@ def good_list(request):
     return render(request, "buyer/goods_list.html", locals())
 
 """
-def good_list(request,page):
+
+
+def good_list(request, page):
     page = int(page)
     type = request.GET.get("type")
     keyword = request.GET.get("keyword")
     goods_list = []
-    if type == 'byid': # 按照商品id查
+    if type == 'byid':  # 按照商品id查
         if keyword:
             types = GoodsType.objects.get(id=int(keyword))
             goods_list = types.goods_set.order_by("goods_pro_date")
-    elif type == 'bykey': # 按商品名字查
+    elif type == 'bykey':  # 按商品名字查
         if keyword:
             goods_list = Goods.objects.filter(goods_name__contains=keyword).order_by("goods_pro_date")
 
@@ -170,29 +175,29 @@ def good_list(request,page):
     return render(request, "buyer/goods_list.html", locals())
 
 
-def good_detail(request,id):
+def good_detail(request, id):
+    good = Goods.objects.filter(id=int(id)).first()
+    return render(request, "buyer/detail.html", locals())
 
-    good = Goods.objects.filter(id = int(id)).first()
-    return render(request,"buyer/detail.html",locals())
 
+import math
 import time
 import datetime
 from Buyer.models import *
 
+
 @loginValid
 def pay_order(request):
-
     if request.method == "GET":
         num = request.GET.get("num")
         id = request.GET.get("id")
 
         if num and id:
-
             num = int(num)
             id = int(id)
 
-            order = PayOrder() # 订单
-            order.order_number = str(time.time()).replace(".","")
+            order = PayOrder()  # 订单
+            order.order_number = str(time.time()).replace(".", "")
             order.order_date = datetime.datetime.now()
             order.order_user = LoginUser.objects.get(id=int(request.COOKIES.get("user_id")))
 
@@ -200,17 +205,17 @@ def pay_order(request):
 
             good = Goods.objects.get(id=id)
 
-            order_info = OrderInfo() #订单详情
+            order_info = OrderInfo()  # 订单详情
             order_info.order_id = order
             order_info.goods_id = good.id
             order_info.goods_picture = good.goods_picture
             order_info.goods_name = good.goods_name
             order_info.goods_count = num
             order_info.goods_price = good.goods_price
-            order_info.goods_total_price = good.goods_price * num
+            order_info.goods_total_price = round(good.goods_price * num, 3)
             order_info.store_id = good.goods_store
 
-            order_info.order_status = 0 # 状态
+            order_info.order_status = 0  # 状态
 
             order_info.save()
             order.order_total = order_info.goods_total_price
@@ -223,8 +228,8 @@ def pay_order(request):
         for key, value in data_item:
             if key.startswith("check_"):
                 id = int(key.split("_", 1)[1])
-                num = int(data.get("count_"+str(id)))
-                request_data.append((id,num))
+                num = int(data.get("count_" + str(id)))
+                request_data.append((id, num))
         if request_data:
             order = PayOrder()  # 创建订单
             order.order_number = str(time.time()).replace(".", "")
@@ -236,35 +241,32 @@ def pay_order(request):
             order.goods_number = 0
             order.save()
 
-
             for id, num in request_data:
-                    good = Goods.objects.get(id=id)
-                    order_info = OrderInfo()  # 订单详情
-                    order_info.order_id = order
-                    order_info.goods_id = good.id
-                    order_info.goods_picture = good.goods_picture
-                    order_info.goods_name = good.goods_name
-                    order_info.goods_count = num
-                    order_info.goods_price = good.goods_price
-                    order_info.goods_total_price = good.goods_price * num
-                    order_info.store_id = good.goods_store
+                good = Goods.objects.get(id=id)
+                order_info = OrderInfo()  # 订单详情
+                order_info.order_id = order
+                order_info.goods_id = good.id
+                order_info.goods_picture = good.goods_picture
+                order_info.goods_name = good.goods_name
+                order_info.goods_count = num
+                order_info.goods_price = good.goods_price
+                order_info.goods_total_price = round(good.goods_price * num, 3)
+                order_info.store_id = good.goods_store
 
-                    order_info.order_status = 0
+                order_info.order_status = 0
 
-                    order_info.save()
+                order_info.save()
 
-                    order.order_total += order_info.goods_total_price  # 订单总价
-                    order.goods_number += 1  # 商品种类个数
+                order.order_total += order_info.goods_total_price  # 订单总价
+                order.goods_number += 1  # 商品种类个数
 
             order.save()
 
+    return render(request, "buyer/place_order.html", locals())
 
-
-    return render(request,"buyer/place_order.html",locals())
 
 @loginValid
 def alipayOrder(request):
-
     order_number = request.GET.get("order_number")
     total = request.GET.get("total")
 
@@ -282,7 +284,7 @@ def alipayOrder(request):
         out_trade_no=order_number,  # 订单编号
         total_amount=str(total),  # 金额
         subject="生鲜交易",
-        return_url="http://127.0.0.1:8000/Buyer/pay_result/", # 支付跳转页面
+        return_url="http://127.0.0.1:8000/Buyer/pay_result/",  # 支付跳转页面
         notify_url="http://127.0.0.1:8000/Buyer/pay_result/",
     )
 
@@ -290,27 +292,38 @@ def alipayOrder(request):
 
     return HttpResponseRedirect(result)
 
+
 @loginValid
 def pay_result(request):
     out_trade_no = request.GET.get("out_trade_no")
     if out_trade_no:
+        payorder = PayOrder.objects.get(order_number=out_trade_no)
+        payorder.orderinfo_set.all().update(order_status=1)
 
-        payorder = PayOrder.objects.get(order_number = out_trade_no)
-        payorder.orderinfo_set.all().update(order_status = 1)
+    return render(request, "buyer/pay_result.html", locals())
+@loginValid
+def delgood(request):
+    sendData = {
+        "code": 200,
+        "data": ""
+    }
+    id = request.GET.get("id")
+    if id:
+        cart = Cart.objects.get(id=id)
+        cart.delete()
+        sendData["data"] = "删除编号%s成功"%id
 
-
-    return render(request,"buyer/pay_result.html",locals())
-
+    return JsonResponse(sendData)
 
 @loginValid
 def add_cart(request):
     sendData = {
-        "code":200,
-        "data":""
+        "code": 200,
+        "data": ""
     }
     if request.method == "POST":
         id = int(request.POST.get("goods_id"))
-        count = int(request.POST.get("count",1))
+        count = int(request.POST.get("count", 1))
 
         goods = Goods.objects.get(id=id)
         cart = Cart()
@@ -318,7 +331,7 @@ def add_cart(request):
         cart.goods_num = count
         cart.goods_price = goods.goods_price
         cart.goods_picture = goods.goods_picture
-        cart.goods_total = goods.goods_price * count
+        cart.goods_total = round(goods.goods_price * count, 3)
         cart.goods_id = goods.id
         cart.cart_user = request.COOKIES.get("user_id")
         cart.save()
@@ -328,9 +341,12 @@ def add_cart(request):
         sendData["data"] = "请求方式错误"
     return JsonResponse(sendData)
 
+
 @loginValid
 def mycart(request):
     id = request.COOKIES.get("user_id")
     carts = Cart.objects.filter(cart_user=id).order_by("-id")
     number = carts.count()
-    return render(request,"buyer/cart.html",locals())
+    return render(request, "buyer/cart.html", locals())
+
+

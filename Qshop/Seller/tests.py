@@ -3,6 +3,7 @@ from django.test import TestCase
 # Create your tests here.
 from Buyer.models import *
 
+
 class OurTest(TestCase):
 
     def setUp(self) -> None:
@@ -14,3 +15,4 @@ class OurTest(TestCase):
 
     def tearDown(self) -> None:
         pass
+

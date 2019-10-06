@@ -36,12 +36,12 @@
 		<li class="col06">
 			<div class="num_add">
 				<a href="javascript:;" onclick="add(this)" class="add fl">+</a>
-				<input type="text" id="inputCountCss1" class="num_show fl" name="count_{{ good.goods_id }}"  value={{ good.goods_num }}>
+				<input type="text" id="inputCountCss1" onmouseleave="shuru(this)" class="num_show fl" name="count_{{ good.goods_id }}"  value={{ good.goods_num }}>
 				<a href="javascript:;" onclick="sub(this)" class="minus fl">-</a>
 			</div>
 		</li>
 		<li class="col07" id="total">{{ good.goods_total }}</li>
-		<li class="col08"><a href="javascript:;" class="del">删除</a></li>
+		<li class="col08"><a href="javascript:;" onclick="delgood({{ good.id }})" class="del">删除</a></li>
 	</ul>
     {% endfor %}
 
@@ -92,7 +92,7 @@
            var tol = $(obj).parent().parent().parent().siblings(".settlements").children().eq(2).children().eq(1).text();
            var price = parseFloat($(obj).parent().parent().prev().text());
 
-           $(obj).parent().parent().next().text(number*price);
+           $(obj).parent().parent().next().text(Math.round(number*price*100)/100);
             totalPrice();
         }
         //减
@@ -104,8 +104,37 @@
            var tol = $(obj).parent().parent().parent().siblings(".settlements").children().eq(2).children().eq(1).text();
            var price = parseFloat($(obj).parent().parent().prev().text());
 
-           $(obj).parent().parent().next().text(number*price);
+           $(obj).parent().parent().next().text(Math.round(number*price*100)/100);
              totalPrice();
+        }
+        //输入
+        function shuru(obj){
+          var number = parseInt($(obj).val());
+          number = number>1?number:1;
+          $(obj).val(number);
+
+           var tol = $(obj).parent().parent().parent().siblings(".settlements").children().eq(2).children().eq(1).text();
+           var price = parseFloat($(obj).parent().parent().prev().text());
+
+           $(obj).parent().parent().next().text(Math.round(number*price*100)/100);
+            totalPrice();
+        };
+        //删除
+        function delgood(id) {
+
+            $.ajax({
+                url:"/Buyer/delgood/?id="+id,
+                type:"get",
+                data:"",
+                success:function (data) {
+
+                    alert(data["data"]);
+                    window.location.href="/Buyer/mycart/"
+                },
+                error:function (data) {
+                    alert("删除失败")
+                }
+            })
         }
 
         //总计
@@ -118,7 +147,7 @@
                     nu+=1;
                      tol += Number(b);
                  }
-                 $('#zongji').text(tol);
+                 $('#zongji').text(Math.round(tol*100)/100);
                 $(this).parent().parent().siblings(".settlements").children().eq(2).children().eq(3).text(nu);
 
              })
