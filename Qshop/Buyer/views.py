@@ -325,6 +325,10 @@ def delgood(request):
 
 @loginValid
 def add_cart(request):
+    """
+    处理ajax 请求，添加商品到购物车 ，成功保存到数据库。
+    传入商品id，数量
+    """
     sendData = {
         "code": 200,
         "data": ""

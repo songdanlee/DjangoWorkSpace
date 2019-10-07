@@ -102,6 +102,8 @@
               url = "/Buyer/pay_order/?num="+num+"&id="+id;
               window.location.href = url;
          });
+
+        // 添加到购物车
          function addCart(obj) {
              var goods_id = obj.id;
              var num = $("#num").val();
@@ -111,7 +113,7 @@
                 "count":num,
                 "csrfmiddlewaretoken":csfr_token,
             };
-            // console.log(sendData)
+             // ajax 发送post请求（商品id，数量）到后台，添加商品到购物车
              $.ajax(
                  {
                     url:"/Buyer/add_cart/",
