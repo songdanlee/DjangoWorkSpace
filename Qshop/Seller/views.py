@@ -1,7 +1,8 @@
 # coding=utf-8
 import hashlib
 
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse
+
 from Seller.models import *
 
 
@@ -93,9 +94,9 @@ from django.views.decorators.cache import cache_page
 @cache_page(60*5) # 使用缓存，时间5分钟
 def login(request):
     """
-       :param request:
-       :description get请求返回登录页面，post请求，传入邮箱，密码，校验邮箱密码(邮箱已注册，邮箱和密码不为空，密码与数据库匹配)，返回index页面
-       :return: 登录成功返回index页面，否则重新登录
+    get请求返回登录页面，post请求，传入邮箱，密码，验证码。
+    校验邮箱密码(邮箱已注册，邮箱和密码不为空，密码与数据库匹配)，判断验证码是否合法(和数据库一致，未使用，时间不超过5分钟)，返回index页面
+    登录成功返回index页面，否则重新登录
     """
     errormsg = ""
     if request.method == "POST":
@@ -274,7 +275,7 @@ def goods_add(request):
     return render(request, "seller/goods_add.html", locals())
 
 
-from Seller.myutils import MailSender,random_code,sendDing as sd
+from Seller.myutils import MailSender,random_code
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from CeleryTask.tasks import sendDing
@@ -349,7 +350,8 @@ def middle_test_view(request):
     rep.render = hello
     return rep
 
-from Buyer.models import OrderInfo,PayOrder
+from Buyer.models import OrderInfo
+
 
 def order_list(request,status):
 
@@ -384,8 +386,10 @@ def change_order(request):
     url = request.META.get("HTTP_REFERER","/Seller/order_list/%s/?page=1"%status)
     response = HttpResponseRedirect(url)
     return response
-from Seller.myutils import datetime_now
-from django.db.models import Sum,Count,Max,Min,Count,Q
+
+
+from django.db.models import Sum
+
 
 def sales_sta(request):
     """
