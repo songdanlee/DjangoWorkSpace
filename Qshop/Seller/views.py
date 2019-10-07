@@ -164,6 +164,9 @@ from  Seller.models import Goods
 
 @loginValid
 def goods_list(request, status="up", page=1):
+    """
+    商品列表页分页，8条一页，未指定页码，默认返回第一页
+    """
     page = int(page)
     user_id = int(request.COOKIES.get("id"))
     user = LoginUser.objects.get(id=user_id)
@@ -174,7 +177,7 @@ def goods_list(request, status="up", page=1):
         goods = goods.filter(goods_status=1)
     else:
         goods = goods.objects.all()
-    goods_pagin = Paginator(goods, 10)
+    goods_pagin = Paginator(goods, 8)
     goods_lists = goods_pagin.page(page)
     return render(request, "seller/goods_list.html", locals())
 

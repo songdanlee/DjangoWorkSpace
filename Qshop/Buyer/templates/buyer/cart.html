@@ -121,13 +121,11 @@
         };
         //删除
         function delgood(id) {
-
             $.ajax({
                 url:"/Buyer/delgood/?id="+id,
                 type:"get",
                 data:"",
                 success:function (data) {
-
                     alert(data["data"]);
                     window.location.href="/Buyer/mycart/"
                 },
