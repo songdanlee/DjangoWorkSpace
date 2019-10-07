@@ -1,13 +1,12 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-import json
-from django.http import HttpResponseRedirect
-from django.core.paginator import Paginator
-from Seller.models import *
-from Seller.views import getPassword
 from alipay import AliPay
+from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+from django.shortcuts import render
 from django.utils.http import urlquote
+
 from Qshop.settings import alipay_private_key_string, alipay_public_key_string
+from Seller.views import getPassword
 
 
 # Create your views here.
@@ -32,9 +31,9 @@ def loginValid(func):
 
 
 def login(request):
+
     if request.method == "POST":
         erremail = ""
-
         email = request.POST.get("email")
         pwd = request.POST.get("pwd")
         user = LoginUser.objects.filter(email=email).first()
@@ -126,8 +125,6 @@ def user_order(request):
     return render(request, "buyer/user_center_order.html", locals())
 
 
-import math
-
 """
 def good_list(request):
     type = request.GET.get("type")
@@ -188,6 +185,10 @@ from Buyer.models import *
 
 @loginValid
 def pay_order(request):
+    """
+    get请求 商品详情页购买单个商品。传入商品id，数量。
+    post请求 购物车购买多个商品。
+    """
     if request.method == "GET":
         num = request.GET.get("num")
         id = request.GET.get("id")
@@ -267,6 +268,9 @@ def pay_order(request):
 
 @loginValid
 def alipayOrder(request):
+    """
+    阿里支付，传入交易订单号，总金额
+    """
     order_number = request.GET.get("order_number")
     total = request.GET.get("total")
 
@@ -282,7 +286,7 @@ def alipayOrder(request):
 
     order_string = alipay.api_alipay_trade_page_pay(
         out_trade_no=order_number,  # 订单编号
-        total_amount=str(total),  # 金额
+        total_amount=str(total),  # 金额 字符串类型
         subject="生鲜交易",
         return_url="http://127.0.0.1:8000/Buyer/pay_result/",  # 支付跳转页面
         notify_url="http://127.0.0.1:8000/Buyer/pay_result/",
@@ -295,6 +299,10 @@ def alipayOrder(request):
 
 @loginValid
 def pay_result(request):
+    """
+    支付结果页
+    如果有out_trade_no，支付成功，修改订单状态
+    """
     out_trade_no = request.GET.get("out_trade_no")
     if out_trade_no:
         payorder = PayOrder.objects.get(order_number=out_trade_no)
