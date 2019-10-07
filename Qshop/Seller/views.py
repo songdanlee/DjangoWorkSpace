@@ -70,11 +70,9 @@ def register(request):
 
 def loginValid(func):
     """
-    :desc 闭包函数校验是否登录
-    :param func:
-    :return:
+    闭包函数校验是否登录 ，如果cookie存有username和id，并且匹配，则放行
+    否则返回登录页
     """
-
     def inner(request, *args, **kwargs):
         username = request.COOKIES.get("username")
         id = request.COOKIES.get("id")
@@ -84,7 +82,6 @@ def loginValid(func):
             if user.username == username:
                 return func(request, *args, **kwargs)
         return HttpResponseRedirect("/Seller/login/")
-
     return inner
 
 import datetime
