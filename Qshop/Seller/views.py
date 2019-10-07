@@ -184,6 +184,9 @@ def goods_list(request, status="up", page=1):
 
 @loginValid
 def goods_status(request, state, id):
+    """
+     处理商品上下架，传入商品id和状态,若传入down，则下架，up为上架，
+    """
     goods = Goods.objects.get(id=int(id))
     if state == 'up':  # 上架
         goods.goods_status = 1

@@ -51,6 +51,7 @@
                       <td>{{ p.goods_location }}</td>
                       <td>{{ p.goods_save_month }}</td>
                       <td>
+                          <!-- 商品上下架按钮 -->
                           <button  class="btn btn-primary" >编辑</button>
                           {% ifequal p.goods_status 1 %}
                           <a class="btn btn-danger" href="/Seller/goods_status/down/{{ p.id }}">下架</a>
