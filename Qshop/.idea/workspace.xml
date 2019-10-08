@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ca1ab934-1f62-4c3a-b69a-eba1bf6a462d" name="Default Changelist" comment="">
+    <list default="true" id="ca1ab934-1f62-4c3a-b69a-eba1bf6a462d" name="Default Changelist" comment="商品类别详情页分页">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buyer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buyer/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,36 +46,14 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Buyer/views.py">
+        <entry file="file://$PROJECT_DIR$/Seller/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="274" column="20" lean-forward="true" selection-start-line="274" selection-start-column="20" selection-end-line="274" selection-end-column="20" />
+            <state relative-caret-position="304">
+              <caret line="249" lean-forward="true" selection-start-line="249" selection-end-line="249" />
               <folding>
-                <element signature="e#438#894#0" />
-                <element signature="e#922#1740#0" />
-                <element signature="e#1770#2563#0" />
-                <element signature="e#2590#2861#0" />
-                <element signature="e#2889#3180#0" />
-                <element signature="e#3223#3392#0" />
-                <element signature="e#3435#3604#0" />
-                <element signature="e#3648#3906#0" />
-                <element signature="e#3922#4561#1" />
-                <element signature="e#4598#5399#0" />
-                <element signature="e#5436#5541#0" />
-                <element signature="e#5689#6777#0" />
-                <element signature="e#6821#8328#0" />
-                <element signature="e#9313#9570#0" />
-                <element signature="e#9520#9757#0" />
+                <element signature="e#2307#2829#0" />
+                <element signature="e#5751#6283#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/cart.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="26" column="34" selection-start-line="26" selection-start-column="25" selection-end-line="26" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -93,8 +70,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>COOKIE</find>
-      <find>Login</find>
       <find>ajax</find>
       <find>username</find>
       <find>ju</find>
@@ -123,6 +98,8 @@
       <find>pay</find>
       <find>payorder</find>
       <find>login</find>
+      <find>goods</find>
+      <find>delete_cookie</find>
     </findStrings>
     <replaceStrings>
       <replace>/static/seller/</replace>
@@ -144,7 +121,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Seller/templates/seller/personal_info.html" />
         <option value="$PROJECT_DIR$/Qshop/urls.py" />
         <option value="$PROJECT_DIR$/Buyer/templates/buyer/user_center_info.html" />
         <option value="$PROJECT_DIR$/Buyer/templates/buyer/user_center_site.html" />
@@ -189,18 +165,19 @@
         <option value="$USER_HOME$/Desktop/pyscript/processTest.py" />
         <option value="$USER_HOME$/Desktop/pyscript/test.py" />
         <option value="E:/gitproject/LearnPython/python_functional.py" />
-        <option value="$PROJECT_DIR$/Buyer/templates/buyer/detail.html" />
         <option value="$PROJECT_DIR$/Buyer/urls.py" />
         <option value="$PROJECT_DIR$/Buyer/templates/buyer/cart.html" />
-        <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
-        <option value="$PROJECT_DIR$/Seller/views.py" />
+        <option value="$PROJECT_DIR$/Buyer/templates/buyer/detail.html" />
         <option value="$PROJECT_DIR$/Buyer/views.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
+        <option value="$PROJECT_DIR$/Seller/templates/seller/goods_list.html" />
+        <option value="$PROJECT_DIR$/Seller/views.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="111" />
-    <option name="y" value="13" />
+    <option name="x" value="227" />
+    <option name="y" value="28" />
     <option name="width" value="1600" />
     <option name="height" value="912" />
   </component>
@@ -217,24 +194,6 @@
               <item name="Qshop" type="b2602c69:ProjectViewProjectNode" />
               <item name="Qshop" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Qshop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Qshop" type="462c0819:PsiDirectoryNode" />
-              <item name="Buyer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Qshop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Qshop" type="462c0819:PsiDirectoryNode" />
-              <item name="Buyer" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Qshop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Qshop" type="462c0819:PsiDirectoryNode" />
-              <item name="Buyer" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="buyer" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -248,7 +207,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Seller" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
@@ -450,7 +409,7 @@
       <workItem from="1569330205234" duration="136000" />
       <workItem from="1570020451115" duration="1861000" />
       <workItem from="1570027794961" duration="14019000" />
-      <workItem from="1570346049898" duration="12500000" />
+      <workItem from="1570346049898" duration="19671000" />
     </task>
     <task id="LOCAL-00001" summary="前台首页类型展示前4条数据">
       <created>1568082639437</created>
@@ -536,7 +495,42 @@
       <option name="project" value="LOCAL" />
       <updated>1570422544381</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="阿里支付功能">
+      <created>1570423039846</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1570423039846</updated>
+    </task>
+    <task id="LOCAL-00014" summary="ajax请求加入购物车">
+      <created>1570423329595</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1570423329595</updated>
+    </task>
+    <task id="LOCAL-00015" summary="商品类别详情页分页">
+      <created>1570424073921</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1570424073921</updated>
+    </task>
+    <task id="LOCAL-00016" summary="商品上下架处理">
+      <created>1570424332402</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1570424332402</updated>
+    </task>
+    <task id="LOCAL-00017" summary="包文件">
+      <created>1570457525624</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1570457525624</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -557,10 +551,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="277055000" />
+    <option name="totallyTimeSpent" value="284226000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="111" y="13" width="1600" height="912" extended-state="0" />
+    <frame x="-234" y="13" width="1600" height="912" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4977064" visible="true" weight="0.19306283" />
@@ -569,7 +563,7 @@
       <window_info id="Structure" order="3" sideWeight="0.5022936" side_tool="true" weight="0.18588082" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.30082417" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.5317919" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.50578034" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -579,7 +573,7 @@
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="DB Execution Console" order="10" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
-      <window_info anchor="bottom" id="Terminal" order="12" weight="0.26445088" />
+      <window_info anchor="bottom" id="Terminal" order="12" visible="true" weight="0.18681319" />
       <window_info anchor="bottom" id="Event Log" order="13" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="14" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -631,8 +625,14 @@
     <MESSAGE value="购物车添加删除功能&#10;优化js小数计算，小数位数过长问题" />
     <MESSAGE value="登录功能实现，增加验证码" />
     <MESSAGE value="登录校验功能，未登录返回登录页" />
-    <option name="LAST_COMMIT_MESSAGE" value="登录校验功能，未登录返回登录页" />
+    <MESSAGE value="阿里支付功能" />
+    <MESSAGE value="ajax请求加入购物车" />
+    <MESSAGE value="商品类别详情页分页" />
+    <MESSAGE value="商品上下架处理" />
+    <MESSAGE value="包文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="包文件" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -713,7 +713,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Desktop/loger.py" />
     <entry file="file://$USER_HOME$/Desktop/ourTest.py" />
     <entry file="file://$USER_HOME$/Desktop/selenium.py" />
     <entry file="file://$USER_HOME$/Desktop/seleniumTest.py" />
@@ -964,11 +963,6 @@
         <state relative-caret-position="-975" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Seller/templates/seller/goods_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1784" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/goods_list.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -997,13 +991,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="101" column="28" lean-forward="true" selection-start-line="101" selection-start-column="21" selection-end-line="101" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Buyer/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
@@ -1023,33 +1010,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://592bcb7a-aae3-49d8-9d15-a3530ba67c21/schema/main/table/Seller_valid_code">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state projectRestartId="87cc8573-4421-4bd8-80db-a439af2826c0">
-          <filtering>
-            <filter text="" />
-          </filtering>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Buyer/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="650">
           <caret line="26" column="16" lean-forward="true" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Seller/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="78" column="66" lean-forward="true" selection-start-line="78" selection-start-column="66" selection-end-line="78" selection-end-column="66" />
-          <folding>
-            <element signature="e#211#381#0" />
-            <element signature="e#411#2297#0" />
-            <element signature="e#2981#5551#0" />
           </folding>
         </state>
       </provider>
@@ -1063,15 +1029,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/cart.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="26" column="34" selection-start-line="26" selection-start-column="25" selection-end-line="26" selection-end-column="34" />
+        <state relative-caret-position="158">
+          <caret line="127" column="41" selection-start-line="127" selection-start-column="41" selection-end-line="127" selection-end-column="41" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Buyer/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="274" column="20" lean-forward="true" selection-start-line="274" selection-start-column="20" selection-end-line="274" selection-end-column="20" />
+        <state relative-caret-position="304">
+          <caret line="336" column="46" lean-forward="true" selection-start-line="336" selection-start-column="46" selection-end-line="336" selection-end-column="46" />
           <folding>
             <element signature="e#438#894#0" />
             <element signature="e#922#1740#0" />
@@ -1084,10 +1050,48 @@
             <element signature="e#3922#4561#1" />
             <element signature="e#4598#5399#0" />
             <element signature="e#5436#5541#0" />
-            <element signature="e#5689#6777#0" />
-            <element signature="e#6821#8328#0" />
+            <element signature="e#5658#8397#0" />
+            <element signature="e#5789#6777#0" />
+            <element signature="e#8501#9244#0" />
             <element signature="e#9313#9570#0" />
             <element signature="e#9520#9757#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="115" column="37" selection-start-line="115" selection-start-column="37" selection-end-line="115" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://592bcb7a-aae3-49d8-9d15-a3530ba67c21/schema/main/table/Seller_valid_code">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="87cc8573-4421-4bd8-80db-a439af2826c0">
+          <filtering>
+            <filter text="" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Seller/templates/seller/goods_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="53" column="38" selection-start-line="53" selection-start-column="38" selection-end-line="53" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/qshop.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Seller/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="249" lean-forward="true" selection-start-line="249" selection-end-line="249" />
+          <folding>
+            <element signature="e#2307#2829#0" />
+            <element signature="e#5751#6283#0" />
           </folding>
         </state>
       </provider>
